@@ -520,7 +520,7 @@ section
 	height: 45px;
 	background: transparent;
 	padding-left: 45px;
-	padding-right: 43px;
+	padding-right: 40px;
 	margin-top: 58px;
 }
 .search_form
@@ -619,8 +619,8 @@ section
 .cart
 {
 	padding-left: 45px;
-	padding-right: 43px;
-	margin-top: 78px;
+	padding-right: 40px;
+	margin-top: 80px;
 }
 .cart_icon
 {
@@ -1518,7 +1518,7 @@ section
 }
 .footer_logo
 {
-	width: 212px;
+	width: 220px;
 }
 .footer_logo a
 {
@@ -1530,7 +1530,7 @@ section
 	padding-top: 13px;
 	padding-bottom: 13px;
 	text-align: center;
-	font-size: 48px;
+	font-size: 40px;
 	font-weight: 700;
 	line-height: 0.75;
 	color: #bbe432;
