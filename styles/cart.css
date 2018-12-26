@@ -495,7 +495,7 @@ section
 	height: 45px;
 	background: transparent;
 	padding-left: 45px;
-	padding-right: 43px;
+	padding-right: 40px;
 	margin-top: 58px;
 }
 .search_form
@@ -594,7 +594,7 @@ section
 .cart
 {
 	padding-left: 45px;
-	padding-right: 43px;
+	padding-right: 40px;
 	margin-top: 78px;
 }
 .cart_icon
