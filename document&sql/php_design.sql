@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50096
 File Encoding         : 65001
 
-Date: 2018-12-27 13:36:43
+Date: 2018-12-27 16:02:18
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -62,7 +62,7 @@ CREATE TABLE `cart_item` (
   PRIMARY KEY  (`cart_item_id`),
   KEY `fk_goods_id` (`goods_id`),
   KEY `fk_cart_id` (`cart_id`),
-  CONSTRAINT `fk_cart_id` FOREIGN KEY (`cart_id`) REFERENCES `cart` (`cart_id`),
+  CONSTRAINT `fk_cart_id` FOREIGN KEY (`cart_id`) REFERENCES `cart` (`cart_id`) ON DELETE CASCADE,
   CONSTRAINT `fk_goods_id` FOREIGN KEY (`goods_id`) REFERENCES `goods` (`goods_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -97,8 +97,8 @@ CREATE TABLE `favorite_item` (
   PRIMARY KEY  (`favorite_item_id`),
   KEY `favorite_id_favorite_item_fk` (`favorite_id`),
   KEY `goods_id_favorite_id_favorite_item_fk` (`goods_id`),
-  CONSTRAINT `favorite_id_favorite_item_fk` FOREIGN KEY (`favorite_id`) REFERENCES `favorite` (`favorite_id`),
-  CONSTRAINT `goods_id_favorite_id_favorite_item_fk` FOREIGN KEY (`goods_id`) REFERENCES `goods` (`goods_id`)
+  CONSTRAINT `goods_id_favorite_id_favorite_item_fk` FOREIGN KEY (`goods_id`) REFERENCES `goods` (`goods_id`) ON DELETE CASCADE,
+  CONSTRAINT `favorite_id_favorite_item_fk` FOREIGN KEY (`favorite_id`) REFERENCES `favorite` (`favorite_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
@@ -149,7 +149,7 @@ CREATE TABLE `goods_img` (
   `goods_id` int(11) NOT NULL COMMENT '商品id',
   PRIMARY KEY  (`goods_img_id`),
   KEY `goods_id_goods_img_fk` (`goods_id`),
-  CONSTRAINT `goods_id_goods_img_fk` FOREIGN KEY (`goods_id`) REFERENCES `goods` (`goods_id`)
+  CONSTRAINT `goods_id_goods_img_fk` FOREIGN KEY (`goods_id`) REFERENCES `goods` (`goods_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
