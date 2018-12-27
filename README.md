@@ -87,22 +87,24 @@ php课程设计作业-网上商城
 :---|:---|:---|:---|:---  
 user_id|用户id|int(11)|否|primary_key，自加  
 username|用户名|varchar(20)|否|无  
-password|密码（可用md5()加密|varchar(16)|否|无  
-email|邮箱|varchar(20)|否|无  
+password|用户密码（可用md5()加密|varchar(16)|否|无  
+telephone|电话号码|char(11)|否|无  
+address|用户地址|varchr(50)|否|无  
+email|用户邮箱|varchar(20)|否|无  
 head_icon|头像图标地址|text|否|无  
-register_time|注册时间|timestamp|否|默认当前时间  
-latest_login_time|最新登录时间|timestamp|否|每次根据当前时间更新
+register_time|注册时间|date|否|默认当前时间  
+latest_login_time|最近登录时间|timestamp|否|每次根据当前时间更新
 
 #### 管理员表(admin)
 
 字段名|备注|数据类型|是否为空|其他
 :---|:---|:---|:---|:---
 admin_id|管理员id|int(11)|否|primary_key，自加
-username|用户名|varchar(20)|否|无
-password|密码（可用md5()加密）|varchar(16)|否|无
-email|邮箱|varchar(20)|否|无
-register_time|注册时间|timestamp|否|默认当前时间
-latest_login_time|最新登录时间|timestamp|否|每次根据当前时间更新
+admin_name|管理员名称|varchar(20)|否|无
+password|管理员密码（可用md5()加密）|varchar(16)|否|无
+email|管理员邮箱|varchar(20)|否|无
+register_time|注册时间|date|否|默认当前时间
+latest_login_time|最近登录时间|timestamp|否|每次根据当前时间更新
 
 #### 商品类别表(goods_class)
 
@@ -137,7 +139,7 @@ goods_id|商品id|int(11)|否|foreign_key
 字段名|备注|数据类型|是否为空|其他
 :---|:---|:---|:---|:---
 cart_id|购物车id|int(11)|否|primary_key，自加
-total_price|购物车商品总价|int(10)|否|默认为0
+total_price|购物车商品总价|int(11)|否|默认为0
 user_id|用户id|int(11)|否|foreign_key
 
 #### 购物车项表(cart_item)
@@ -172,7 +174,7 @@ goods_id|商品id|int(11)|否|foreign_key
 :---|:---|:---|:---|:---
 order_id|订单id|int(11)|否|primary_key，自加
 order_code|订单编码|char(13)|否|无
-total_price|订单商品总价|int(10)|否|默认为0
+total_price|订单商品总价|int(11)|否|默认为0
 user_addr|用户地址|varchar(50)|否|无
 user_phone|用户电话|char(11)|否|无
 postcode|邮政编码|char(6)|否|无
