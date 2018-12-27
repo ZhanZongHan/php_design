@@ -34,6 +34,61 @@ CREATE TABLE `admin` (
 -- ----------------------------
 
 -- ----------------------------
+-- Table structure for `user`
+-- ----------------------------
+DROP TABLE IF EXISTS `user`;
+CREATE TABLE `user` (
+  `user_id` int(11) NOT NULL auto_increment COMMENT '用户id',
+  `username` varchar(20) collate utf8_unicode_ci NOT NULL COMMENT '用户名',
+  `password` varchar(16) collate utf8_unicode_ci NOT NULL COMMENT '用户密码',
+  `telephone` char(11) collate utf8_unicode_ci NOT NULL COMMENT '电话号码',
+  `address` varchar(50) collate utf8_unicode_ci NOT NULL COMMENT '用户地址',
+  `email` varchar(20) collate utf8_unicode_ci NOT NULL COMMENT '用户邮箱',
+  `head_icon` text collate utf8_unicode_ci NOT NULL COMMENT '头像图标地址',
+  `register_time` date NOT NULL COMMENT '注册时间',
+  `latest_login_time` timestamp NOT NULL default '0000-00-00 00:00:00' on update CURRENT_TIMESTAMP COMMENT '最近登录时间',
+  PRIMARY KEY  (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- ----------------------------
+-- Records of user
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `goods_class`
+-- ----------------------------
+DROP TABLE IF EXISTS `goods_class`;
+CREATE TABLE `goods_class` (
+  `goods_class_id` int(11) NOT NULL auto_increment COMMENT '商品类别id',
+  `goods_class_name` varchar(20) collate utf8_unicode_ci NOT NULL COMMENT '商品类别名',
+  PRIMARY KEY  (`goods_class_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- ----------------------------
+-- Records of goods_class
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `goods`
+-- ----------------------------
+DROP TABLE IF EXISTS `goods`;
+CREATE TABLE `goods` (
+  `goods_id` int(11) NOT NULL auto_increment COMMENT '商品id',
+  `goods_name` varchar(20) collate utf8_unicode_ci NOT NULL COMMENT '商品名',
+  `goods_stock` int(7) NOT NULL default '0' COMMENT '商品库存',
+  `goods_price` int(7) NOT NULL default '0' COMMENT '商品单价',
+  `goods_description` text collate utf8_unicode_ci COMMENT '商品描述',
+  `goods_class_id` int(11) NOT NULL COMMENT '商品类别id',
+  PRIMARY KEY  (`goods_id`),
+  KEY `goods_class_id_goods_fk` (`goods_class_id`),
+  CONSTRAINT `goods_class_id_goods_fk` FOREIGN KEY (`goods_class_id`) REFERENCES `goods_class` (`goods_class_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- ----------------------------
+-- Records of goods
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for `cart`
 -- ----------------------------
 DROP TABLE IF EXISTS `cart`;
@@ -106,40 +161,6 @@ CREATE TABLE `favorite_item` (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for `goods`
--- ----------------------------
-DROP TABLE IF EXISTS `goods`;
-CREATE TABLE `goods` (
-  `goods_id` int(11) NOT NULL auto_increment COMMENT '商品id',
-  `goods_name` varchar(20) collate utf8_unicode_ci NOT NULL COMMENT '商品名',
-  `goods_stock` int(7) NOT NULL default '0' COMMENT '商品库存',
-  `goods_price` int(7) NOT NULL default '0' COMMENT '商品单价',
-  `goods_description` text collate utf8_unicode_ci COMMENT '商品描述',
-  `goods_class_id` int(11) NOT NULL COMMENT '商品类别id',
-  PRIMARY KEY  (`goods_id`),
-  KEY `goods_class_id_goods_fk` (`goods_class_id`),
-  CONSTRAINT `goods_class_id_goods_fk` FOREIGN KEY (`goods_class_id`) REFERENCES `goods_class` (`goods_class_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
--- ----------------------------
--- Records of goods
--- ----------------------------
-
--- ----------------------------
--- Table structure for `goods_class`
--- ----------------------------
-DROP TABLE IF EXISTS `goods_class`;
-CREATE TABLE `goods_class` (
-  `goods_class_id` int(11) NOT NULL auto_increment COMMENT '商品类别id',
-  `goods_class_name` varchar(20) collate utf8_unicode_ci NOT NULL COMMENT '商品类别名',
-  PRIMARY KEY  (`goods_class_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
--- ----------------------------
--- Records of goods_class
--- ----------------------------
-
--- ----------------------------
 -- Table structure for `goods_img`
 -- ----------------------------
 DROP TABLE IF EXISTS `goods_img`;
@@ -198,23 +219,3 @@ CREATE TABLE `order_item` (
 -- Records of order_item
 -- ----------------------------
 
--- ----------------------------
--- Table structure for `user`
--- ----------------------------
-DROP TABLE IF EXISTS `user`;
-CREATE TABLE `user` (
-  `user_id` int(11) NOT NULL auto_increment COMMENT '用户id',
-  `username` varchar(20) collate utf8_unicode_ci NOT NULL COMMENT '用户名',
-  `password` varchar(16) collate utf8_unicode_ci NOT NULL COMMENT '用户密码',
-  `telephone` char(11) collate utf8_unicode_ci NOT NULL COMMENT '电话号码',
-  `address` varchar(50) collate utf8_unicode_ci NOT NULL COMMENT '用户地址',
-  `email` varchar(20) collate utf8_unicode_ci NOT NULL COMMENT '用户邮箱',
-  `head_icon` text collate utf8_unicode_ci NOT NULL COMMENT '头像图标地址',
-  `register_time` date NOT NULL COMMENT '注册时间',
-  `latest_login_time` timestamp NOT NULL default '0000-00-00 00:00:00' on update CURRENT_TIMESTAMP COMMENT '最近登录时间',
-  PRIMARY KEY  (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
--- ----------------------------
--- Records of user
--- ----------------------------
