@@ -6,6 +6,7 @@
  * Time: 下午7:08
  */
 include_once($_COOKIE['ABSPATH'] . '/src/tools/SessionTool.php');
+include_once($_COOKIE['ABSPATH'] . '/src/controllers/OrderController.php');
 $sessionTool = new SessionTool();
 /*if (!$sessionTool->admin_session_validate())
     header("Location:../login/login.html");*/

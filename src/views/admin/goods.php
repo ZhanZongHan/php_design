@@ -6,6 +6,7 @@
  * Time: 上午9:49
  */
 include_once($_COOKIE['ABSPATH'] . '/src/tools/SessionTool.php');
+include_once($_COOKIE['ABSPATH'] . '/src/controllers/GoodsController.php');
 $sesssionTool = new SessionTool();
 $goodses = $sesssionTool->getAttribute('goodses');
 ?>
@@ -51,10 +52,12 @@ $goodses = $sesssionTool->getAttribute('goodses');
         <div class="collapse navbar-collapse navbar-ex1-collapse">
             <ul class="nav navbar-nav side-nav">
                 <li><a href="admin_index.html"><i class="fa fa-dashboard"></i> 首页</a></li>
-                <li><a href="../../controllers/orderController.php?type=show"><i class="fa fa-desktop"></i> 订单管理</a></li>
+                <li><a href="../../controllers/orderController.php?type=show"><i class="fa fa-desktop"></i> 订单管理</a>
+                </li>
                 <li><a href="#"><i class="fa fa-file"></i> 用户管理</a></li>
                 <li><a href="#"><i class="fa fa-table"></i> 报表统计</a></li>
-                <li class="active"><a href="../../controllers/goodsController.php?type=show"><i class="fa fa-caret-square-o-down"></i> 商品管理</a></li>
+                <li class="active"><a href="../../controllers/goodsController.php?type=show"><i
+                                class="fa fa-caret-square-o-down"></i> 商品管理</a></li>
             </ul>
 
             <ul class="nav navbar-nav navbar-right navbar-user">
@@ -78,16 +81,17 @@ $goodses = $sesssionTool->getAttribute('goodses');
                            as $goods) { ?>
                 <div class="col-sm-6 col-md-3">
                     <a href="goods_item.php" class="thumbnail">
-                        <img src="<?php echo $goods->getGoodsPrimaryImgUrl ?>"
-                             alt="<?php echo $goods->getGoodsName()?>">
+                        <img class="img-thumbnail" src="<?php echo $goods->getGoodsPrimaryImgUrl() ?>"
+                             alt="<?php echo $goods->getGoodsName() ?>">
                     </a>
+                    <center>
                     <a href="../../controllers/goodsController.php?type=delete&goods_id=<?php echo $goods->getGoodsId() ?>">
                         <button type="button" class="btn btn-danger">删除</button>
-                    </a>
+                    </a></center>
                 </div>
             <?php } ?>
         </div>
-        <a href="goods_add.html">
+        <a href="../../controllers/goodsController.php?type=showGoodsClasses">
             <button type="button" class="btn btn-primary">添加商品</button>
         </a>
         <div>

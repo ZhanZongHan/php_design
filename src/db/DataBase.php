@@ -8,7 +8,7 @@
 
 class DataBase
 {
-    private $host = '127.0.0.1';
+    private $host = 'localhost';
     private $port = '3306';
     private $username = 'root';
     private $password = '';
@@ -48,5 +48,10 @@ class DataBase
     public function close()
     {
         $this->close();
+    }
+
+    public function getInsertId()
+    {
+        return $this->conn->insert_id;
     }
 }

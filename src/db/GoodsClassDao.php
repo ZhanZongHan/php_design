@@ -19,7 +19,7 @@ class GoodsClassDao
         $this->db = new DataBase();
     }
 
-    public function findAllGoodsClasses($where) {
+    public function findGoodsClasses($where) {
         $sql = "select * from `goods_class`";
         if (count($where) > 0) {
             $key = array_keys($where)[0];

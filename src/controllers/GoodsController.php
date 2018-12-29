@@ -6,22 +6,47 @@
  * Time: 上午9:43
  */
 include_once ($_COOKIE['ABSPATH'].'/src/db/GoodsDao.php');
+include_once ($_COOKIE['ABSPATH'].'/src/db/GoodsClassDao.php');
+include_once ($_COOKIE['ABSPATH'].'/src/db/GoodsImgDao.php');
 class GoodsController
 {
+    private $goodsDao = null;
+    private $goodsClassDao = null;
+    private $goodsImgDao = null;
+
+    /**
+     * GoodsController constructor.
+     */
+    public function __construct()
+    {
+        $this->goodsDao = new GoodsDao();
+        $this->goodsClassDao = new GoodsClassDao();
+        $this->goodsImgDao = new GoodsImgDao();
+    }
+
+
     /**
      * @param array $where
      * @return array
      */
     public function findGoodses($where) {
-        $orderDao = new GoodsDao();
-        return $orderDao->findGoodses($where);
+        return $this->goodsDao->findGoodses($where);
+    }
+
+    /**
+     * @param array $where
+     * @return array
+     */
+    public function findGoodsClasses($where) {
+        return $this->goodsClassDao->findGoodsClasses($where);
     }
 
     /**
      * @param array $goods_attr
+     * @return int 返回goods_id
      */
     public function addGoods($goods_attr) {
-
+        return $this->goodsDao->addGoods($goods_attr);
     }
 
     /**
@@ -35,7 +60,7 @@ class GoodsController
      * @param array $goods_img_attr
      */
     public function addGoodsImg($goods_img_attr) {
-
+        return $this->goodsImgDao->addGoodsImg($goods_img_attr);
     }
 
     /**
@@ -43,8 +68,7 @@ class GoodsController
      * @return bool
      */
     public function deleteGoods($goods_id) {
-        $orderDao = new GoodsDao();
-        return $orderDao->deleteGoods($goods_id);
+        return $this->goodsDao->deleteGoods($goods_id);
     }
 
     /**
