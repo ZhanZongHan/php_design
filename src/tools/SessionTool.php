@@ -42,4 +42,20 @@ class SessionTool
     {
         $_SESSION['USER_LOGIN_SUCCESS'] = false;
     }
+
+    public function setAttribute($name, $value) {
+        $_SESSION[$name] = $value;
+    }
+
+    public function getAttribute($name) {
+        return $_SESSION[$name];
+    }
+
+    public function unsetAttribute($name) {
+        unset($_SESSION[$name]);
+    }
+
+    public function isExist($name) {
+        return isset($_SESSION[$name]);
+    }
 }
