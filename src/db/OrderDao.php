@@ -49,6 +49,7 @@ class OrderDao
             $order->setUserAddr($row['user_addr']);
             $order->setUserId($row['user_id']);
             $order->setUserPhone($row['user_phone']);
+            $order->setOrderTime($row['order_time']);
             array_push($orders, $order);
         }
         return $orders;

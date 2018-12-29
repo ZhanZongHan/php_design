@@ -16,6 +16,7 @@ class Order
     private $postcode;
     private $order_state;
     private $user_id;
+    private $order_time;
 
     /**
      * @return int
@@ -145,4 +146,19 @@ class Order
         $this->user_id = $user_id;
     }
 
+    /**
+     * @return string
+     */
+    public function getOrderTime()
+    {
+        return $this->order_time;
+    }
+
+    /**
+     * @param string $order_time
+     */
+    public function setOrderTime($order_time)
+    {
+        $this->order_time = $order_time;
+    }
 }

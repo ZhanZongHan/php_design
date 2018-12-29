@@ -6,16 +6,10 @@
  * Time: 下午7:08
  */
 include_once($_COOKIE['ABSPATH'] . '/src/tools/SessionTool.php');
-include_once($_COOKIE['ABSPATH'] . '/src/controllers/OrderController.php');
 $sessionTool = new SessionTool();
 /*if (!$sessionTool->admin_session_validate())
     header("Location:../login/login.html");*/
-$orderController = new OrderController();
-$where = array();
-if (isset($_GET['user_id'])) {
-    $where['user_id'] = $_GET['user_id'];
-}
-$orders = $orderController->findOrders($where);
+$orders = $sessionTool->getAttribute('orders');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -58,19 +52,11 @@ $orders = $orderController->findOrders($where);
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse navbar-ex1-collapse">
             <ul class="nav navbar-nav side-nav">
-                <li class="active"><a href="admin_index.html"><i class="fa fa-dashboard"></i> 首页</a></li>
-                <li><a href="order.php"><i class="fa fa-desktop"></i> 订单管理</a></li>
-                <li><a href="user.php"><i class="fa fa-file"></i> 用户管理</a></li>
+                <li><a href="admin_index.html"><i class="fa fa-dashboard"></i> 首页</a></li>
+                <li class="active"><a href="../../controllers/orderController.php?type=show"><i class="fa fa-desktop"></i> 订单管理</a></li>
+                <li><a href="#"><i class="fa fa-file"></i> 用户管理</a></li>
                 <li><a href="#"><i class="fa fa-table"></i> 报表统计</a></li>
-                <li class="dropdown">
-                    <a href="goods.php" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-caret-square-o-down"></i>
-                        商品管理 <b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="#">添加修改分类</a></li>
-                        <li><a href="#">添加商品</a></li>
-                        <li><a href="#">查询商品</a></li>
-                    </ul>
-                </li>
+                <li><a href="../../controllers/goodsController.php?type=show"><i class="fa fa-caret-square-o-down"></i> 商品管理</a></li>
             </ul>
 
             <ul class="nav navbar-nav navbar-right navbar-user">
@@ -89,7 +75,7 @@ $orders = $orderController->findOrders($where);
         </div><!-- /.navbar-collapse -->
     </nav>
     <div id="page-wrapper">
-        <form action="test.php">
+        <form action="#" method="get">
             查询方式：
             <select name="search_way" id="search_way">
                 <option value="order_id">订单id</option>
@@ -104,10 +90,7 @@ $orders = $orderController->findOrders($where);
             <tr>
                 <th>订单id</th>
                 <th>订单编码</th>
-                <th>订单总额</th>
-                <th>用户地址</th>
-                <th>用户电话</th>
-                <th>邮政编码</th>
+                <th>下单时间</th>
                 <th>订单状态</th>
                 <th>订单用户id</th>
             </tr>
@@ -115,12 +98,9 @@ $orders = $orderController->findOrders($where);
             <tbody>
             <?php foreach ($orders as $order) { ?>
                 <tr>
-                    <td><?php echo $order->getOrderId() ?></td>
+                    <td><a href="order_item.php?order_id=<?php echo $order->getOrderId() ?>"><?php echo $order->getOrderId() ?></a></td>
                     <td><?php echo $order->getOrderCode() ?></td>
-                    <td><?php echo $order->getTotalPrice() ?></td>
-                    <td><?php echo $order->getUserAddr() ?></td>
-                    <td><?php echo $order->getUserPhone() ?></td>
-                    <td><?php echo $order->getPostCode() ?></td>
+                    <td><?php echo $order->getOrderTime() ?></td>
                     <td><?php echo $order->getOrderState() ?></td>
                     <td><?php echo $order->getUserId() ?></td>
                 </tr>
@@ -131,6 +111,7 @@ $orders = $orderController->findOrders($where);
             <li><a href="#">&larr;上一页</a></li>
             <li><a href="#">下一页&rarr;</a></li>
         </ul>
+    </div>
     <!-- JavaScript -->
     <script src="js/jquery-1.10.2.js"></script>
     <script src="js/bootstrap.js"></script>
