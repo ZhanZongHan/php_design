@@ -6,5 +6,5 @@
  * Time: 下午11:54
  */
 define('ABSPATH', dirname(__FILE__));
-setrawcookie('ABSPATH', ABSPATH, time()+3600);
+setrawcookie('ABSPATH', ABSPATH, time()+60*60*24);
 header("Location:src/views/admin/admin_index.html");

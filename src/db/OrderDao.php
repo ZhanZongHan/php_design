@@ -6,11 +6,11 @@
  * Time: 下午7:53
  */
 include_once($_COOKIE['ABSPATH'].'/src/db/DataBase.php');
+include_once($_COOKIE['ABSPATH'].'/src/beans/Order.php');
 
 class OrderDao
 {
-    private $db;
-    private $where = '';
+    private $db = null;
 
     /**
      * OrderDao constructor.
@@ -20,27 +20,21 @@ class OrderDao
         $this->db = new DataBase();
     }
 
-    // 返回要查找的Order对象数据
-    public function findOneOrder($order_id)
-    {
-        $sql = "select * from `order` where order_id = " . $order_id;
-        $this->db->query($sql);
-        $rs = $this->db->getRs();
-        if ($rs && $this->db->getNumRows() > 0)
-            return $rs->fetch_array();
-        else
-            return null;
-    }
-
-    // 返回所有订单
-    public function findAllOrders($where)
+    // 根据查询条件返回订单列表
+    public function findOrders($where)
     {
         $sql = "select * from `order`";
         if (count($where) > 0) {
             $key = array_keys($where)[0];
-            $sql = $sql." where ".$key."=".$where[$key];
-            print_r($where);
-            echo $sql;
+            switch ($key) {
+                case 'order_id':
+                    $sql = $sql." where ".$key."=".$where[$key];
+                    break;
+                case 'order_code':
+                    $sql = $sql." where ".$key."='".$where[$key]."'";
+                    break;
+                default:break;
+            }
         }
         $this->db->query($sql);
         $rs = $this->db->getRs();
@@ -59,5 +53,4 @@ class OrderDao
         }
         return $orders;
     }
-
 }

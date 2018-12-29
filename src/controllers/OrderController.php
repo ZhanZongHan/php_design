@@ -8,8 +8,8 @@
 include_once ($_COOKIE['ABSPATH'].'/src/db/OrderDao.php');
 class OrderController
 {
-    public function findAllOrders($where) {
+    public function findOrders($where) {
         $orderDao = new OrderDao();
-        return $orderDao->findAllOrders($where);
+        return $orderDao->findOrders($where);
     }
 }

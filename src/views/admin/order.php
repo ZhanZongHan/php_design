@@ -15,7 +15,7 @@ $where = array();
 if (isset($_GET['user_id'])) {
     $where['user_id'] = $_GET['user_id'];
 }
-$orders = $orderController->findAllOrders($where);
+$orders = $orderController->findOrders($where);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -38,7 +38,6 @@ $orders = $orderController->findAllOrders($where);
     <link rel="stylesheet" href="http://cdn.oesmith.co.uk/morris-0.4.3.min.css">
 
 </head>
-
 <body>
 
 <div id="wrapper">
@@ -60,11 +59,11 @@ $orders = $orderController->findAllOrders($where);
         <div class="collapse navbar-collapse navbar-ex1-collapse">
             <ul class="nav navbar-nav side-nav">
                 <li class="active"><a href="admin_index.html"><i class="fa fa-dashboard"></i> 首页</a></li>
-                <li><a href="#"><i class="fa fa-desktop"></i> 订单管理</a></li>
-                <li><a href="#"><i class="fa fa-file"></i> 用户管理</a></li>
+                <li><a href="order.php"><i class="fa fa-desktop"></i> 订单管理</a></li>
+                <li><a href="user.php"><i class="fa fa-file"></i> 用户管理</a></li>
                 <li><a href="#"><i class="fa fa-table"></i> 报表统计</a></li>
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-caret-square-o-down"></i>
+                    <a href="goods.php" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-caret-square-o-down"></i>
                         商品管理 <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li><a href="#">添加修改分类</a></li>
@@ -90,9 +89,13 @@ $orders = $orderController->findAllOrders($where);
         </div><!-- /.navbar-collapse -->
     </nav>
     <div id="page-wrapper">
-        <form action="">
-            根据用户id查询订单：
-            <input type="text" name="user_id" required="required">
+        <form action="test.php">
+            查询方式：
+            <select name="search_way" id="search_way">
+                <option value="order_id">订单id</option>
+                <option value="order_code" selected="selected">订单编码</option>
+            </select>
+            <input type="text" name="search_input" required="required">
             <button type="submit" class="btn btn-primary">查询</button>
         </form>
         <br>
