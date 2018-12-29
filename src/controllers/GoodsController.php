@@ -40,9 +40,11 @@ class GoodsController
 
     /**
      * @param int $goods_id
+     * @return bool
      */
     public function deleteGoods($goods_id) {
-
+        $orderDao = new GoodsDao();
+        return $orderDao->deleteGoods($goods_id);
     }
 
     /**

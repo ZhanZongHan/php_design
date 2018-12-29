@@ -46,9 +46,16 @@ class GoodsDao
             $goods->setGoodsClassId($row['goods_class_id']);
             $goods->setGoodsPrice($row['goods_price']);
             $goods->setGoodsStock($row['goods_stock']);
+            $goods->setGoodsPrimaryImgUrl($row['goods_primary_img_url']);
             array_push($goodses, $goods);
         }
         return $goodses;
+    }
+
+    public function deleteGoods($goods_id) {
+        $sql = "delete from `goods` where goods_id=".$goods_id;
+        $this->db->query($sql);
+        return $this->db->getRs();
     }
 
 }

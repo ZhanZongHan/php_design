@@ -13,6 +13,8 @@ class Goods
     private $goods_stock;
     private $goods_price;
     private $goods_description;
+    private $goods_primary_img_url;
+
     private $goods_class_id;
 
     /**
@@ -94,7 +96,21 @@ class Goods
     {
         $this->goods_description = $goods_description;
     }
+    /**
+     * @return string
+     */
+    public function getGoodsPrimaryImgUrl()
+    {
+        return $this->goods_primary_img_url;
+    }
 
+    /**
+     * @param string $goods_primary_img_url
+     */
+    public function setGoodsPrimaryImgUrl($goods_primary_img_url)
+    {
+        $this->goods_primary_img_url = $goods_primary_img_url;
+    }
     /**
      * @return int
      */
