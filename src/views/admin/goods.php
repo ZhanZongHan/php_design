@@ -7,8 +7,18 @@
  */
 include_once($_COOKIE['ABSPATH'] . '/src/tools/SessionTool.php');
 include_once($_COOKIE['ABSPATH'] . '/src/controllers/GoodsController.php');
+include_once($_COOKIE['ABSPATH'] . '/src/controllers/getDatas.php');
 $sesssionTool = new SessionTool();
-$goodses = $sesssionTool->getAttribute('goodses');
+if ($sesssionTool->isExist('goodses')) {
+    $goodses = $sesssionTool->getAttribute('goodses');
+} else {
+    $goodses = get_goodses();
+}
+if ($sesssionTool->isExist('goods_classes')) {
+    $goods_classes = $sesssionTool->getAttribute('goods_classes');
+} else {
+    $goods_classes = get_goods_classes();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -52,11 +62,12 @@ $goodses = $sesssionTool->getAttribute('goodses');
         <div class="collapse navbar-collapse navbar-ex1-collapse">
             <ul class="nav navbar-nav side-nav">
                 <li class="active"><a href="admin_index.html"><i class="fa fa-dashboard"></i> 首页</a></li>
-                <li><a href="../../controllers/orderController.php?type=show_all_orders&dst=admin/order.php"><i class="fa fa-desktop"></i> 订单管理</a>
+                <li><a href="../../controllers/orderController.php?type=show_all_orders&dst=admin/order.php"><i
+                                class="fa fa-desktop"></i> 订单管理</a>
                 </li>
                 <li><a href="#"><i class="fa fa-file"></i> 用户管理</a></li>
                 <li><a href="#"><i class="fa fa-table"></i> 报表统计</a></li>
-                <li><a href="../../controllers/goodsController.php?type=show_all_goodses&dst=admin/goods.php"><i class="fa fa-caret-square-o-down"></i>
+                <li><a href="goods.php"><i class="fa fa-caret-square-o-down"></i>
                         商品管理</a></li>
             </ul>
 
@@ -88,13 +99,34 @@ $goodses = $sesssionTool->getAttribute('goodses');
             </div>
         </div>
         <div class="row">
+            <div class="dropdown col-sm-6 col-md-3">
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                    商品显示类别
+                </button>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a href="../../controllers/goodsController.php?type=show_all_goodses&dst=admin/goods.php">所有</a>
+                    </li>
+                    <?php for ($i = 0;
+                               $i < count($goods_classes);
+                               $i++) { ?>
+                        <li>
+                            <a href="../../controllers/goodsController.php?type=show_goodses_by_goods_class_id&dst=admin/goods.php&goods_class_id=<?php echo $goods_classes[$i]->getGoodsClassId() ?>"><?php echo $goods_classes[$i]->getGoodsClassName() ?></a>
+                        </li>
+                    <?php } ?>
+                </ul>
+            </div>
+        </div>
+        <br>
+        <div class="row">
             <?php foreach ($goodses
                            as $goods) { ?>
                 <div class="col-sm-6 col-md-3">
                     <a href="../../controllers/goodsController.php?type=show_goods_imgs_by_goods_id&dst=admin/goods_item.php&goods_id=<?php echo $goods->getGoodsId() ?>"
-                       ">
-                        <img width="260px" height="180px" class="img-circle" src="<?php echo $goods->getGoodsPrimaryImgUrl() ?>"
-                             alt="<?php echo $goods->getGoodsName() ?>">
+                    ">
+                    <img width="260px" height="180px" class="img-circle"
+                         src="<?php echo $goods->getGoodsPrimaryImgUrl() ?>"
+                         alt="<?php echo $goods->getGoodsName() ?>">
                     </a>
                     <center>
                         <label type="button" class="btn btn-default btn-sm" style="text-shadow: black 5px 3px 3px;">
@@ -108,7 +140,7 @@ $goodses = $sesssionTool->getAttribute('goodses');
                     <div class="modal fade" id="<?php echo $goods->getGoodsId() ?>">
                         <div class="modal-dialog modal-sm">
                             <div class="modal-content">
-
+                                <!-- 模态框头部 -->
                                 <div class="modal-header">
                                     <h4 class="modal-title">是否确认删除</h4>
                                     <button type="button" class="close" data-dismiss="modal">&times;</button>

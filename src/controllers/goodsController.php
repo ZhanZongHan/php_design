@@ -14,11 +14,13 @@ isset($_GET['type']) ? $type = $_GET['type'] : $type = '';
 isset($_GET['dst']) ? $dst = $_GET['dst'] : $dst = '';
 if ($type == 'show_all_goodses') {
     // 获取商品
-    $where = array();
-    if (isset($_GET['goods_class_id'])) {
-        $where['goods_class_id'] = $_GET['goods_class_id'];
-    }
     $goodses = get_goodses();
+    $sessionTool->setAttribute('goodses', $goodses);
+    header("Location:../views/".$dst);
+} else if ($type == 'show_goodses_by_goods_class_id') {
+    // 根据分类号获取商品
+    $goods_class_id = $_GET['goods_class_id'];
+    $goodses = get_goodses_by_goods_class_id($goods_class_id);
     $sessionTool->setAttribute('goodses', $goodses);
     header("Location:../views/".$dst);
 } else if ($type == 'delete_goods') {
