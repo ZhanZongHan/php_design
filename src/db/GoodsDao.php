@@ -7,6 +7,7 @@
  */
 include_once($_COOKIE['ABSPATH'] . '/src/db/DataBase.php');
 include_once($_COOKIE['ABSPATH'] . '/src/beans/Goods.php');
+include_once($_COOKIE['ABSPATH'] . '/src/tools/GoodsPager.php');
 
 class GoodsDao
 {
@@ -25,9 +26,9 @@ class GoodsDao
      * @param array $where
      * @return array
      */
-    public function findGoodses($where)
+    public function findGoodses($where, $cur_page)
     {
-        $sql = "select * from `goods`";
+        $sql = "select * from `goods` limit " . (($cur_page - 1) * GoodsPager::$page_size) . ", " . GoodsPager::$page_size;
         if (count($where) > 0) {
             $key = array_keys($where)[0];
             switch ($key) {
@@ -96,4 +97,12 @@ class GoodsDao
         return $goods_attr['goods_id'];
     }
 
+    public function getCounts()
+    {
+        $sql = "select count(*) as counts from `goods`";
+        $this->db->query($sql);
+        $rs = $this->db->getRs();
+        $row = $rs->fetch_array();
+        return $row['counts'];
+    }
 }

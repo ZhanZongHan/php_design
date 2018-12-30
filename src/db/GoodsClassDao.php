@@ -35,6 +35,5 @@ class GoodsClassDao
             array_push($goods_classes, $goods_class);
         }
         return $goods_classes;
-
     }
 }

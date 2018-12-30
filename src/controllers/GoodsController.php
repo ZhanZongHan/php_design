@@ -27,10 +27,11 @@ class GoodsController
 
     /**
      * @param array $where
+     * @param int $cur_page
      * @return array
      */
-    public function findGoodses($where) {
-        return $this->goodsDao->findGoodses($where);
+    public function findGoodses($where, $cur_page) {
+        return $this->goodsDao->findGoodses($where, $cur_page);
     }
 
     /**
@@ -107,5 +108,12 @@ class GoodsController
      */
     public function modifyGoodsClass($goods_class_attr) {
 
+    }
+
+    /**
+     * @return int
+     */
+    public function getCounts() {
+        return $this->goodsDao->getCounts();
     }
 }

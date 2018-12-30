@@ -8,10 +8,10 @@
 include_once($_COOKIE['ABSPATH'] . '/src/controllers/GoodsController.php');
 include_once($_COOKIE['ABSPATH'] . '/src/controllers/OrderController.php');
 $goodsController = new GoodsController();
-function get_goodses()
+function get_goodses($cur_page)
 {
     global $goodsController;
-    return $goodsController->findGoodses(array());
+    return $goodsController->findGoodses(array(), $cur_page);
 }
 
 function get_goodses_by_goods_id($goods_id)
@@ -28,11 +28,11 @@ function get_goodses_by_goods_name($goods_name)
     return $goodsController->findGoodses($where);
 }
 
-function get_goodses_by_goods_class_id($goods_class_id)
+function get_goodses_by_goods_class_id($goods_class_id, $cur_page)
 {
     global $goodsController;
     $where['goods_class_id'] = $goods_class_id;
-    return $goodsController->findGoodses($where);
+    return $goodsController->findGoodses($where, $cur_page);
 }
 
 function get_goods_classes()

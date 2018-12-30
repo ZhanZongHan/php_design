@@ -6,9 +6,12 @@
  * Time: 上午9:49
  */
 include_once($_COOKIE['ABSPATH'] . '/src/tools/SessionTool.php');
+include_once($_COOKIE['ABSPATH'] . '/src/tools/GoodsPager.php');
 include_once($_COOKIE['ABSPATH'] . '/src/controllers/GoodsController.php');
 include_once($_COOKIE['ABSPATH'] . '/src/controllers/getDatas.php');
 $sesssionTool = new SessionTool();
+isset($_GET['cur_page']) ? $cur_page = $_GET['cur_page'] : $cur_page = 1;
+$pager = new GoodsPager($cur_page);
 if ($sesssionTool->isExist('goodses')) {
     $goodses = $sesssionTool->getAttribute('goodses');
 } else {
@@ -61,13 +64,14 @@ if ($sesssionTool->isExist('goods_classes')) {
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse navbar-ex1-collapse">
             <ul class="nav navbar-nav side-nav">
-                <li class="active"><a href="admin_index.html"><i class="fa fa-dashboard"></i> 首页</a></li>
-                <li><a href="../../controllers/orderController.php?type=show_all_orders&dst=admin/order.php"><i
+                <li><a href="admin_index.html"><i class="fa fa-dashboard"></i> 首页</a></li>
+                <li>
+                    <a href="../../controllers/orderController.php?type=show_all_orders&dst=admin/order.php&cur_page=<?php echo $cur_page ?>"><i
                                 class="fa fa-desktop"></i> 订单管理</a>
                 </li>
                 <li><a href="#"><i class="fa fa-file"></i> 用户管理</a></li>
                 <li><a href="#"><i class="fa fa-table"></i> 报表统计</a></li>
-                <li><a href="goods.php"><i class="fa fa-caret-square-o-down"></i>
+                <li class="active"><a href="goods.php"><i class="fa fa-caret-square-o-down"></i>
                         商品管理</a></li>
             </ul>
 
@@ -115,6 +119,9 @@ if ($sesssionTool->isExist('goods_classes')) {
                         </li>
                     <?php } ?>
                 </ul>
+                <a href="goods_add.php">
+                    <button type="button" class="btn btn-link">添加商品</button>
+                </a>
             </div>
         </div>
         <br>
@@ -164,19 +171,40 @@ if ($sesssionTool->isExist('goods_classes')) {
                 </div>
             <?php } ?>
         </div>
-        <a href="goods_add.php">
-            <button type="button" class="btn btn-primary">添加商品</button>
-        </a>
-        <div>
-            显示全部商品以及主图（点击主图可进入商品详情紧接着可以修改信息）
-            删除商品
-        </div>
-        <div>
-            添加商品
-        </div>
         <ul class="pager">
-            <li><a href="#">&larr;上一页</a></li>
-            <li><a href="#">下一页&rarr;</a></li>
+            <?php if ($pager->getCurPage() == 1) { ?>
+                <li>
+                    <a href="../../controllers/goodsController.php?type=show_all_goodses&dst=admin/goods.php&cur_page=<?php echo $pager->getHomePage() ?>">首
+                        页</a>
+                </li>
+                <li>
+                    <a href="../../controllers/goodsController.php?type=show_all_goodses&dst=admin/goods.php&cur_page=<?php echo $pager->getNextPage() ?>">下一页&rarr;</a>
+                </li>
+
+            <?php } else if ($pager->getCurPage() == $pager->getTotalPage()) { ?>
+                <li>
+                    <a href="../../controllers/goodsController.php?type=show_all_goodses&dst=admin/goods.php&cur_page=<?php echo $pager->getPrevPage() ?>">&larr;上一页</a>
+                </li>
+                <li>
+                    <a href="../../controllers/goodsController.php?type=show_all_goodses&dst=admin/goods.php&cur_page=<?php echo $pager->getTailPage() ?>">尾
+                        页&rarr;</a>
+                </li>
+            <?php } else { ?>
+                <li>
+                    <a href="../../controllers/goodsController.php?type=show_all_goodses&dst=admin/goods.php&cur_page=<?php echo $pager->getHomePage() ?>">首
+                        页</a>
+                </li>
+                <li>
+                    <a href="../../controllers/goodsController.php?type=show_all_goodses&dst=admin/goods.php&cur_page=<?php echo $pager->getPrevPage() ?>">&larr;上一页</a>
+                </li>
+                <li>
+                    <a href="../../controllers/goodsController.php?type=show_all_goodses&dst=admin/goods.php&cur_page=<?php echo $pager->getNextPage() ?>">下一页&rarr;</a>
+                </li>
+                <li>
+                    <a href="../../controllers/goodsController.php?type=show_all_goodses&dst=admin/goods.php&cur_page=<?php echo $pager->getTailPage() ?>">尾
+                        页&rarr;</a>
+                </li>
+            <?php } ?>
         </ul>
     </div>
     <!-- JavaScript -->

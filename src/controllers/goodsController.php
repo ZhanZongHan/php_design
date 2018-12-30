@@ -14,15 +14,17 @@ isset($_GET['type']) ? $type = $_GET['type'] : $type = '';
 isset($_GET['dst']) ? $dst = $_GET['dst'] : $dst = '';
 if ($type == 'show_all_goodses') {
     // 获取商品
-    $goodses = get_goodses();
+    isset($_GET['cur_page']) ? $cur_page = $_GET['cur_page'] : $cur_page = 1;
+    $goodses = get_goodses($cur_page);
     $sessionTool->setAttribute('goodses', $goodses);
-    header("Location:../views/".$dst);
+    header("Location:../views/$dst?cur_page=$cur_page");
 } else if ($type == 'show_goodses_by_goods_class_id') {
     // 根据分类号获取商品
+    isset($_GET['cur_page']) ? $cur_page = $_GET['cur_page'] : $cur_page = 1;
     $goods_class_id = $_GET['goods_class_id'];
-    $goodses = get_goodses_by_goods_class_id($goods_class_id);
+    $goodses = get_goodses_by_goods_class_id($goods_class_id, $cur_page);
     $sessionTool->setAttribute('goodses', $goodses);
-    header("Location:../views/".$dst);
+    header("Location:../views/$dst?cur_page=$cur_page");
 } else if ($type == 'delete_goods') {
     // 删除商品
     $goods_id = $_GET['goods_id'];
@@ -33,7 +35,7 @@ if ($type == 'show_all_goodses') {
     $where = array();
     $goods_classes = $goodsController->findGoodsClasses($where);
     $sessionTool->setAttribute('goodsClasses', $goods_classes);
-    header("Location:../views/admin/".$dst);
+    header("Location:../views/admin/$dst");
 } else if (isset($_POST['goods_add_submit'])) {
     // 添加商品
     $goods_attr = array();
