@@ -7,10 +7,12 @@
  */
 include_once($_COOKIE['ABSPATH'] . '/src/tools/SessionTool.php');
 include_once($_COOKIE['ABSPATH'] . '/src/controllers/OrderController.php');
+include_once($_COOKIE['ABSPATH'] . '/src/controllers/getDatas.php');
 $sessionTool = new SessionTool();
 $orderController = new OrderController();
-$type = $_GET['type'];
-if ($type == 'show') {
+isset($_GET['type']) ? $type = $_GET['type'] : $type = '';
+isset($_GET['dst']) ? $dst = $_GET['dst'] : $dst = '';
+if ($type == 'show_all_orders') {
     $where = array();
     if (isset($_GET['user_id'])) {
         $where['user_id'] = $_GET['user_id'];
@@ -20,5 +22,5 @@ if ($type == 'show') {
     }
     $orders = $orderController->findOrders($where);
     $sessionTool->setAttribute('orders', $orders);
-    header("Location:../views/admin/order.php");
+    header("Location:../views/".$dst);
 }

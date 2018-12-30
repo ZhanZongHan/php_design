@@ -47,11 +47,13 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse navbar-ex1-collapse">
             <ul class="nav navbar-nav side-nav">
-                <li><a href="admin_index.html"><i class="fa fa-dashboard"></i> 首页</a></li>
-                <li><a href="../../controllers/orderController.php?type=show"><i class="fa fa-desktop"></i> 订单管理</a></li>
+                <li class="active"><a href="admin_index.html"><i class="fa fa-dashboard"></i> 首页</a></li>
+                <li><a href="../../controllers/orderController.php?type=show_all_orders&dst=admin/order.php"><i class="fa fa-desktop"></i> 订单管理</a>
+                </li>
                 <li><a href="#"><i class="fa fa-file"></i> 用户管理</a></li>
                 <li><a href="#"><i class="fa fa-table"></i> 报表统计</a></li>
-                <li><a href="../../controllers/goodsController.php?type=show"><i class="fa fa-caret-square-o-down"></i> 商品管理</a></li>
+                <li><a href="../../controllers/goodsController.php?type=show_all_goodses&dst=admin/goods.php"><i class="fa fa-caret-square-o-down"></i>
+                        商品管理</a></li>
             </ul>
 
             <ul class="nav navbar-nav navbar-right navbar-user">

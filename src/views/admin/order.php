@@ -53,11 +53,13 @@ $orders = $sessionTool->getAttribute('orders');
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse navbar-ex1-collapse">
             <ul class="nav navbar-nav side-nav">
-                <li><a href="admin_index.html"><i class="fa fa-dashboard"></i> 首页</a></li>
-                <li class="active"><a href="../../controllers/orderController.php?type=show"><i class="fa fa-desktop"></i> 订单管理</a></li>
+                <li class="active"><a href="admin_index.html"><i class="fa fa-dashboard"></i> 首页</a></li>
+                <li><a href="../../controllers/orderController.php?type=show_all_orders&dst=admin/order.php"><i class="fa fa-desktop"></i> 订单管理</a>
+                </li>
                 <li><a href="#"><i class="fa fa-file"></i> 用户管理</a></li>
                 <li><a href="#"><i class="fa fa-table"></i> 报表统计</a></li>
-                <li><a href="../../controllers/goodsController.php?type=show"><i class="fa fa-caret-square-o-down"></i> 商品管理</a></li>
+                <li><a href="../../controllers/goodsController.php?type=show_all_goodses&dst=admin/goods.php"><i class="fa fa-caret-square-o-down"></i>
+                        商品管理</a></li>
             </ul>
 
             <ul class="nav navbar-nav navbar-right navbar-user">
@@ -76,42 +78,66 @@ $orders = $sessionTool->getAttribute('orders');
         </div><!-- /.navbar-collapse -->
     </nav>
     <div id="page-wrapper">
-        <form action="#" method="get">
-            查询方式：
-            <select name="search_way" id="search_way">
-                <option value="order_id">订单id</option>
-                <option value="order_code" selected="selected">订单编码</option>
-            </select>
-            <input type="text" name="search_input" required="required">
-            <button type="submit" class="btn btn-primary">查询</button>
-        </form>
+        <div class="row">
+            <div>
+                <h1>订单管理
+                    <small> 订单的跟进查看</small>
+                </h1>
+                <ol class="breadcrumb">
+                    <li><a href="admin_index.html"><i class="icon-dashboard"></i> 首页</a></li>
+                    <li class="active"><i class="icon-file-alt"></i> 添加商品</li>
+                </ol>
+            </div>
+        </div>
+        <div class="row">
+            <form action="#" method="get">
+                <div class="form-group">
+                    <label>查询方式：</label>
+                    <select name="search_way" id="search_way">
+                        <option value="order_id">订单id</option>
+                        <option value="order_code" selected="selected">订单编码</option>
+                    </select>
+
+                    <div class="form-group input-group">
+                        <input type="text" class="form-control" name="search_input" required="required">
+                        <span class="input-group-btn">
+                  <button class="btn btn-default" type="submit"><i class="fa fa-search"></i></button>
+                </span>
+                    </div>
+                </div>
+            </form>
+        </div>
         <br>
-        <table class="table table-bordered">
-            <thead>
-            <tr>
-                <th>订单id</th>
-                <th>订单编码</th>
-                <th>下单时间</th>
-                <th>订单状态</th>
-                <th>订单用户id</th>
-            </tr>
-            </thead>
-            <tbody>
-            <?php foreach ($orders as $order) { ?>
+        <div class="row">
+            <table class="table table-bordered">
+                <thead>
                 <tr>
-                    <td><a href="order_item.php?order_id=<?php echo $order->getOrderId() ?>"><?php echo $order->getOrderId() ?></a></td>
-                    <td><?php echo $order->getOrderCode() ?></td>
-                    <td><?php echo $order->getOrderTime() ?></td>
-                    <td><?php echo $order->getOrderState() ?></td>
-                    <td><?php echo $order->getUserId() ?></td>
+                    <th>订单id</th>
+                    <th>订单编码</th>
+                    <th>下单时间</th>
+                    <th>订单状态</th>
+                    <th>订单用户id</th>
                 </tr>
-            <?php } ?>
-            </tbody>
-        </table>
-        <ul class="pager">
-            <li><a href="#">&larr;上一页</a></li>
-            <li><a href="#">下一页&rarr;</a></li>
-        </ul>
+                </thead>
+                <tbody>
+                <?php foreach ($orders as $order) { ?>
+                    <tr>
+                        <td>
+                            <a href="order_item.php?order_id=<?php echo $order->getOrderId() ?>"><?php echo $order->getOrderId() ?></a>
+                        </td>
+                        <td><?php echo $order->getOrderCode() ?></td>
+                        <td><?php echo $order->getOrderTime() ?></td>
+                        <td><?php echo $order->getOrderState() ?></td>
+                        <td><?php echo $order->getUserId() ?></td>
+                    </tr>
+                <?php } ?>
+                </tbody>
+            </table>
+            <ul class="pager">
+                <li><a href="#">&larr;上一页</a></li>
+                <li><a href="#">下一页&rarr;</a></li>
+            </ul>
+        </div>
     </div>
     <!-- JavaScript -->
     <script src="js/jquery-1.10.2.js"></script>

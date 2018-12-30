@@ -1,8 +1,14 @@
 <?php
 include_once($_COOKIE['ABSPATH'] . '/src/tools/SessionTool.php');
 include_once($_COOKIE['ABSPATH'] . '/src/controllers/GoodsController.php');
+include_once($_COOKIE['ABSPATH'] . '/src/controllers/getDatas.php');
 $sesssionTool = new SessionTool();
-$goodsClasses = $sesssionTool->getAttribute('goodsClasses');
+if ($sesssionTool->isExist('goodsClasses')) {
+    $goodsClasses = $sesssionTool->getAttribute('goodsClasses');
+} else {
+    $goodsClasses = get_goods_classes();
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -21,9 +27,8 @@ $goodsClasses = $sesssionTool->getAttribute('goodsClasses');
     <!-- Add custom CSS here -->
     <link href="css/sb-admin.css" rel="stylesheet">
     <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
-    <!-- Page Specific CSS -->
-    <link rel="stylesheet" href="http://cdn.oesmith.co.uk/morris-0.4.3.min.css">
-
+    <script src="http://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="http://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
 
@@ -45,12 +50,12 @@ $goodsClasses = $sesssionTool->getAttribute('goodsClasses');
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse navbar-ex1-collapse">
             <ul class="nav navbar-nav side-nav">
-                <li><a href="admin_index.html"><i class="fa fa-dashboard"></i> 首页</a></li>
-                <li><a href="../../controllers/orderController.php?type=show"><i class="fa fa-desktop"></i> 订单管理</a>
+                <li class="active"><a href="admin_index.html"><i class="fa fa-dashboard"></i> 首页</a></li>
+                <li><a href="../../controllers/orderController.php?type=show_all_orders&dst=admin/order.php"><i class="fa fa-desktop"></i> 订单管理</a>
                 </li>
                 <li><a href="#"><i class="fa fa-file"></i> 用户管理</a></li>
                 <li><a href="#"><i class="fa fa-table"></i> 报表统计</a></li>
-                <li><a href="../../controllers/goodsController.php?type=show"><i class="fa fa-caret-square-o-down"></i>
+                <li><a href="../../controllers/goodsController.php?type=show_all_goodses&dst=admin/goods.php"><i class="fa fa-caret-square-o-down"></i>
                         商品管理</a></li>
             </ul>
 
@@ -70,37 +75,50 @@ $goodsClasses = $sesssionTool->getAttribute('goodsClasses');
         </div><!-- /.navbar-collapse -->
     </nav>
     <div id="page-wrapper">
-        <form action="../../controllers/goodsController.php?type=addGoods" class="form-horizontal" role="form"
+        <div class="row">
+            <div class="col-lg-12">
+                <h1>添加商品
+                    <small> 商品的增删查改</small>
+                </h1>
+                <ol class="breadcrumb">
+                    <li><a href="../../controllers/goodsController.php?type=show_all_goodses&dst=admin/goods.php"><i class="icon-dashboard"></i>
+                            商品管理</a></li>
+                    <li class="active"><i class="icon-file-alt"></i> 添加商品</li>
+                </ol>
+            </div>
+        </div>
+        <form action="../../controllers/goodsController.php" class="form-horizontal" role="form"
               method="post" enctype="multipart/form-data">
             <div class="form-group">
-                <label for="goods_name" class="col-sm-2 control-label">商品名</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" id="goods_name" name="goods_name" required="required"
-                           placeholder="请输入商品名">
-                </div>
+                <label for="goods_name">商品名</label>
+                <input type="text" class="form-control" id="goods_name" name="goods_name" required="required"
+                       placeholder="请输入商品名">
             </div>
+
             <div class="form-group">
-                <label for="goods_class" class="col-sm-2 control-label">商品类别</label>
-                <select name='goods_class_id' id='goods_class'>
+                <label for="goods_class">商品类别</label>
+                <select class="form-control" name='goods_class_id' id='goods_class'>
                     <?php for ($i = 0; $i < count($goodsClasses); $i++) { ?>
                         <option value='<?php echo $goodsClasses[$i]->getGoodsClassId() ?>'><?php echo $goodsClasses[$i]->getGoodsClassName() ?></option>
                     <?php } ?>
                 </select>
             </div>
+
             <div class="form-group">
-                <label for="goods_price" class="col-sm-2 control-label">商品单价</label>
-                <div class="col-sm-10">
+                <label for="goods_price">商品单价</label>
+                <div class="input-group">
+                    <span class="input-group-addon">$</span>
                     <input type="text" class="form-control" id="goods_price" name="goods_price" required="required"
                            placeholder="请输入商品单价">
                 </div>
             </div>
+
             <div class="form-group">
-                <label for="good_stock" class="col-sm-2 control-label">商品库存</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" id="goods_stock" name="goods_stock" required="required"
-                           placeholder="请输入商品库存">
-                </div>
+                <label for="good_stock">商品库存</label>
+                <input type="text" class="form-control" id="goods_stock" name="goods_stock" required="required"
+                       placeholder="请输入商品库存">
             </div>
+
             <div class="form-group">
                 <label>商品图片(注：必须添加4张图片，且第一张作为主图显示)</label>
                 <input type="file" name="goods_imgs[]" required="required">
@@ -108,24 +126,41 @@ $goodsClasses = $sesssionTool->getAttribute('goodsClasses');
                 <input type="file" name="goods_imgs[]" required="required">
                 <input type="file" name="goods_imgs[]" required="required">
             </div>
+
             <div class="form-group">
                 <label for="goods_description">商品描述</label>
                 <textarea class="form-control" rows="3" id="goods_description" name="goods_description"></textarea>
             </div>
-            <button type="submit" class="btn btn-default" name="goods_add_submit">添加</button>
-            <button type="reset" class="btn btn-danger">重置</button>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+                添加
+            </button>
+            <button type="reset" class="btn btn-default">重置</button>
+            <!-- 模态框 -->
+            <div class="modal fade" id="myModal">
+                <div class="modal-dialog modal-sm">
+                    <div class="modal-content">
+
+                        <div class="modal-header">
+                            <h4 class="modal-title">是否确认添加</h4>
+                        </div>
+
+                        <!-- 模态框主体 -->
+                        <div class="modal-body">
+
+                        </div>
+                        <!-- 模态框底部 -->
+                        <div class="modal-footer">
+                            <button name="goods_add_submit" type="submit" class="btn btn-primary">确认添加</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <input type="hidden" value="admin/goods.php" name="dst">
         </form>
     </div>
 </div>
-<!-- JavaScript -->
-<script src="js/jquery-1.10.2.js"></script>
-<script src="js/bootstrap.js"></script>
 
-<!-- Page Specific Plugins -->
-<script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
-<script src="http://cdn.oesmith.co.uk/morris-0.4.3.min.js"></script>
-<script src="js/morris/chart-data-morris.js"></script>
-<script src="js/tablesorter/jquery.tablesorter.js"></script>
-<script src="js/tablesorter/tables.js"></script>
 </body>
 </html>

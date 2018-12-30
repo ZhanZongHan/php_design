@@ -24,12 +24,12 @@ class GoodsImgDao
      * @param array $where
      * @return array
      */
-    public function findAllGoodsClasses($where)
+    public function findGoodsImgs($where)
     {
-        $sql = "select * from `goods_class`";
+        $sql = "select * from `goods_img`";
         if (count($where) > 0) {
             $key = array_keys($where)[0];
-            $sql = $sql . " where " . $key . "='" . $where[$key] . "'";
+            $sql = $sql . " where " . $key . "=" . $where[$key] . "";
         }
         $this->db->query($sql);
         $rs = $this->db->getRs();

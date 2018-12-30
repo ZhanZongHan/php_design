@@ -42,6 +42,14 @@ class GoodsController
     }
 
     /**
+     * @param array $where
+     * @return array
+     */
+    public function findGoodsImgs($where) {
+        return $this->goodsImgDao->findGoodsImgs($where);
+    }
+
+    /**
      * @param array $goods_attr
      * @return int 返回goods_id
      */
@@ -91,7 +99,7 @@ class GoodsController
      * @param int $goods_attr
      */
     public function modifyGoods($goods_attr) {
-
+        return $this->goodsDao->modifyGoods($goods_attr);
     }
 
     /**

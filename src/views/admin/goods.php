@@ -51,13 +51,13 @@ $goodses = $sesssionTool->getAttribute('goodses');
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse navbar-ex1-collapse">
             <ul class="nav navbar-nav side-nav">
-                <li><a href="admin_index.html"><i class="fa fa-dashboard"></i> 首页</a></li>
-                <li><a href="../../controllers/orderController.php?type=show"><i class="fa fa-desktop"></i> 订单管理</a>
+                <li class="active"><a href="admin_index.html"><i class="fa fa-dashboard"></i> 首页</a></li>
+                <li><a href="../../controllers/orderController.php?type=show_all_orders&dst=admin/order.php"><i class="fa fa-desktop"></i> 订单管理</a>
                 </li>
                 <li><a href="#"><i class="fa fa-file"></i> 用户管理</a></li>
                 <li><a href="#"><i class="fa fa-table"></i> 报表统计</a></li>
-                <li class="active"><a href="../../controllers/goodsController.php?type=show"><i
-                                class="fa fa-caret-square-o-down"></i> 商品管理</a></li>
+                <li><a href="../../controllers/goodsController.php?type=show_all_goodses&dst=admin/goods.php"><i class="fa fa-caret-square-o-down"></i>
+                        商品管理</a></li>
             </ul>
 
             <ul class="nav navbar-nav navbar-right navbar-user">
@@ -77,21 +77,62 @@ $goodses = $sesssionTool->getAttribute('goodses');
     </nav>
     <div id="page-wrapper">
         <div class="row">
+            <div class="col-lg-12">
+                <h1>商品管理
+                    <small> 商品的增删查改</small>
+                </h1>
+                <ol class="breadcrumb">
+                    <li><a href="admin_index.html"><i class="icon-dashboard"></i> 首页</a></li>
+                    <li class="active"><i class="icon-file-alt"></i> 商品管理</li>
+                </ol>
+            </div>
+        </div>
+        <div class="row">
             <?php foreach ($goodses
                            as $goods) { ?>
                 <div class="col-sm-6 col-md-3">
-                    <a href="goods_item.php" class="thumbnail">
-                        <img class="img-thumbnail" src="<?php echo $goods->getGoodsPrimaryImgUrl() ?>"
+                    <a href="../../controllers/goodsController.php?type=show_goods_imgs_by_goods_id&dst=admin/goods_item.php&goods_id=<?php echo $goods->getGoodsId() ?>"
+                       ">
+                        <img width="260px" height="180px" class="img-circle" src="<?php echo $goods->getGoodsPrimaryImgUrl() ?>"
                              alt="<?php echo $goods->getGoodsName() ?>">
                     </a>
                     <center>
-                    <a href="../../controllers/goodsController.php?type=delete&goods_id=<?php echo $goods->getGoodsId() ?>">
-                        <button type="button" class="btn btn-danger">删除</button>
-                    </a></center>
+                        <label type="button" class="btn btn-default btn-sm" style="text-shadow: black 5px 3px 3px;">
+                            <span class="glyphicon glyphicon-bookmark"></span> <?php echo $goods->getGoodsName() ?>
+                        </label>
+                        <button type="button" class="btn btn-danger" data-toggle="modal"
+                                data-target="#<?php echo $goods->getGoodsId() ?>">删除
+                        </button>
+                    </center>
+                    <!-- 模态框 -->
+                    <div class="modal fade" id="<?php echo $goods->getGoodsId() ?>">
+                        <div class="modal-dialog modal-sm">
+                            <div class="modal-content">
+
+                                <div class="modal-header">
+                                    <h4 class="modal-title">是否确认删除</h4>
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                </div>
+
+                                <!-- 模态框主体 -->
+                                <div class="modal-body">
+
+                                </div>
+                                <!-- 模态框底部 -->
+                                <div class="modal-footer">
+                                    <a href="../../controllers/goodsController.php?type=delete_goods&dst=admin/goods.php&goods_id=<?php echo $goods->getGoodsId() ?>">
+                                        <button type="button" class="btn btn-danger">确认删除</button>
+                                    </a></center>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
                 </div>
             <?php } ?>
         </div>
-        <a href="../../controllers/goodsController.php?type=showGoodsClasses">
+        <a href="goods_add.php">
             <button type="button" class="btn btn-primary">添加商品</button>
         </a>
         <div>
@@ -107,8 +148,8 @@ $goodses = $sesssionTool->getAttribute('goodses');
         </ul>
     </div>
     <!-- JavaScript -->
-    <script src="js/jquery-1.10.2.js"></script>
-    <script src="js/bootstrap.js"></script>
+    <script src="http://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="http://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
     <!-- Page Specific Plugins -->
     <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>

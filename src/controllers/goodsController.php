@@ -7,29 +7,31 @@
  */
 include_once($_COOKIE['ABSPATH'] . '/src/tools/SessionTool.php');
 include_once($_COOKIE['ABSPATH'] . '/src/controllers/GoodsController.php');
+include_once($_COOKIE['ABSPATH'] . '/src/controllers/getDatas.php');
 $sessionTool = new SessionTool();
 $goodsController = new GoodsController();
 isset($_GET['type']) ? $type = $_GET['type'] : $type = '';
-if ($type == 'show') {
-    // 按条件显示商品
+isset($_GET['dst']) ? $dst = $_GET['dst'] : $dst = '';
+if ($type == 'show_all_goodses') {
+    // 获取商品
     $where = array();
     if (isset($_GET['goods_class_id'])) {
         $where['goods_class_id'] = $_GET['goods_class_id'];
     }
-    $goodses = $goodsController->findGoodses($where);
+    $goodses = get_goodses();
     $sessionTool->setAttribute('goodses', $goodses);
-    header("Location:../views/admin/goods.php");
-} else if ($type == 'delete') {
+    header("Location:../views/".$dst);
+} else if ($type == 'delete_goods') {
     // 删除商品
     $goods_id = $_GET['goods_id'];
     $goodsController->deleteGoods($goods_id);
-    header("Location:../controllers/goodsController.php?type=show");
-} else if ($type == 'showGoodsClasses') {
-    // 显示商品类
+    header("Location:../controllers/goodsController.php?type=show_all_goodses&dst=".$dst);
+} else if ($type == 'show_goods_classes') {
+    // 获取商品类
     $where = array();
     $goods_classes = $goodsController->findGoodsClasses($where);
     $sessionTool->setAttribute('goodsClasses', $goods_classes);
-    header("Location:../views/admin/goods_add.php");
+    header("Location:../views/admin/".$dst);
 } else if (isset($_POST['goods_add_submit'])) {
     // 添加商品
     $goods_attr = array();
@@ -61,6 +63,26 @@ if ($type == 'show') {
         $goodsController->addGoodsImg($goods_img_attr);
     }
 
+    $dst = $_POST['dst'];
+    header("Location:../controllers/goodsController.php?type=show_all_goodses&dst=".$dst);
+} else if (isset($_POST['goods_modify_submit'])) {
+    // 添加商品
+    $goods_attr = array();
+    $goods_attr['goods_id'] = $_POST['goods_id'];
+    $goods_attr['goods_name'] = $_POST['goods_name'];
+    $goods_attr['goods_class_id'] = $_POST['goods_class_id'];
+    $goods_attr['goods_price'] = $_POST['goods_price'];
+    $goods_attr['goods_stock'] = $_POST['goods_stock'];
+    $goods_attr['goods_description'] = $_POST['goods_description'];
 
-    header("Location:../controllers/goodsController.php?type=show");
+    $goods_id = $goodsController->modifyGoods($goods_attr);
+
+    $dst = $_POST['dst'];
+    header("Location:../controllers/goodsController.php?type=show_all_goodses&dst=".$dst);
+}else if ($type == 'show_goods_imgs_by_goods_id') {
+    // 返回商品图片集
+    $goods_id = $_GET['goods_id'];
+    $goods_imgs = get_goods_imgs_by_goods_id($goods_id);
+    $sessionTool->setAttribute('goods_imgs', $goods_imgs);
+    header("Location:../views/".$dst."?goods_id=".$goods_id);
 }

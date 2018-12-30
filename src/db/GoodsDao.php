@@ -60,14 +60,14 @@ class GoodsDao
 
     /**
      * @param array $goods_attr 要添加的商品的属性
-     * @return bool 返回新添加的goods_id
+     * @return int 返回新添加的goods_id
      */
     public function addGoods($goods_attr)
     {
         $sql = sprintf("insert into `goods` (goods_name, goods_stock, goods_price, 
           goods_description, goods_primary_img_url, goods_class_id) values ('%s',%d,%f,'%s','%s',%d)",
-            $goods_attr['goods_name'],$goods_attr['goods_stock'],$goods_attr['goods_price'],
-            $goods_attr['goods_description'],$goods_attr['goods_primary_img_url'],$goods_attr['goods_class_id']);
+            $goods_attr['goods_name'], $goods_attr['goods_stock'], $goods_attr['goods_price'],
+            $goods_attr['goods_description'], $goods_attr['goods_primary_img_url'], $goods_attr['goods_class_id']);
         $this->db->query($sql);
         return $this->db->getInsertId();
     }
@@ -81,6 +81,19 @@ class GoodsDao
         $sql = "delete from `goods` where goods_id=" . $goods_id;
         $this->db->query($sql);
         return $this->db->getRs();
+    }
+
+    /**
+     * @param array $goods_attr 要修改的商品的属性
+     * @return int 返回修改的goods_id
+     */
+    public function modifyGoods($goods_attr)
+    {
+        $sql = sprintf("update `goods` set goods_name='%s', goods_stock=%d, goods_price=%f, 
+          goods_description='%s', goods_class_id=%d", $goods_attr['goods_name'], $goods_attr['goods_stock'], $goods_attr['goods_price'],
+            $goods_attr['goods_description'], $goods_attr['goods_class_id']);
+        $this->db->query($sql);
+        return $goods_attr['goods_id'];
     }
 
 }
