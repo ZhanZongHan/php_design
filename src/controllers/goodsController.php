@@ -6,8 +6,8 @@
  * Time: 下午1:45
  */
 include_once($_COOKIE['ABSPATH'] . '/src/tools/SessionTool.php');
-include_once($_COOKIE['ABSPATH'] . '/src/controllers/GoodsController.php');
 include_once($_COOKIE['ABSPATH'] . '/src/controllers/getDatas.php');
+include_once($_COOKIE['ABSPATH'] . '/src/controllers/GoodsController.php');
 $sessionTool = new SessionTool();
 $goodsController = new GoodsController();
 isset($_GET['type']) ? $type = $_GET['type'] : $type = '';
@@ -29,7 +29,7 @@ if ($type == 'show_all_goodses') {
     // 删除商品
     $goods_id = $_GET['goods_id'];
     $goodsController->deleteGoods($goods_id);
-    header("Location:../controllers/goodsController.php?type=show_all_goodses&dst=".$dst);
+    header("Location:../controllers/goodsController.php?type=show_all_goodses&dst=" . $dst);
 } else if ($type == 'show_goods_classes') {
     // 获取商品类
     $where = array();
@@ -68,7 +68,7 @@ if ($type == 'show_all_goodses') {
     }
 
     $dst = $_POST['dst'];
-    header("Location:../controllers/goodsController.php?type=show_all_goodses&dst=".$dst);
+    header("Location:../controllers/goodsController.php?type=show_all_goodses&dst=" . $dst);
 } else if (isset($_POST['goods_modify_submit'])) {
     // 添加商品
     $goods_attr = array();
@@ -82,11 +82,11 @@ if ($type == 'show_all_goodses') {
     $goods_id = $goodsController->modifyGoods($goods_attr);
 
     $dst = $_POST['dst'];
-    header("Location:../controllers/goodsController.php?type=show_all_goodses&dst=".$dst);
-}else if ($type == 'show_goods_imgs_by_goods_id') {
+    header("Location:../controllers/goodsController.php?type=show_all_goodses&dst=" . $dst);
+} else if ($type == 'show_goods_imgs_by_goods_id') {
     // 返回商品图片集
     $goods_id = $_GET['goods_id'];
     $goods_imgs = get_goods_imgs_by_goods_id($goods_id);
     $sessionTool->setAttribute('goods_imgs', $goods_imgs);
-    header("Location:../views/".$dst."?goods_id=".$goods_id);
+    header("Location:../views/" . $dst . "?goods_id=" . $goods_id);
 }

@@ -9,7 +9,7 @@ include_once($_COOKIE['ABSPATH'] . '/src/tools/SessionTool.php');
 include_once($_COOKIE['ABSPATH'] . '/src/controllers/OrderController.php');
 $sessionTool = new SessionTool();
 /*if (!$sessionTool->admin_session_validate())
-    header("Location:../login/login.html");*/
+    header("Location:../login/admin_login.php");*/
 $orders = $sessionTool->getAttribute('orders');
 ?>
 <!DOCTYPE html>
@@ -47,13 +47,13 @@ $orders = $sessionTool->getAttribute('orders');
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="admin_index.html">后台管理</a>
+            <a class="navbar-brand" href="admin_index.php">后台管理</a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse navbar-ex1-collapse">
             <ul class="nav navbar-nav side-nav">
-                <li><a href="admin_index.html"><i class="fa fa-dashboard"></i> 首页</a></li>
+                <li><a href="admin_index.php"><i class="fa fa-dashboard"></i> 首页</a></li>
                 <li class="active"><a href="../../controllers/orderController.php?type=show_all_orders&dst=admin/order.php"><i
                                 class="fa fa-desktop"></i> 订单管理</a>
                 </li>
@@ -73,7 +73,7 @@ $orders = $sessionTool->getAttribute('orders');
                         <li><a href="#"><i class="fa fa-envelope"></i> Inbox <span class="badge">7</span></a></li>
                         <li><a href="#"><i class="fa fa-gear"></i> Settings</a></li>
                         <li class="divider"></li>
-                        <li><a href="../login/login.html"><i class="fa fa-power-off"></i> 退出登录</a></li>
+                        <li><a href="../login/admin_login.php"><i class="fa fa-power-off"></i> 退出登录</a></li>
                     </ul>
                 </li>
             </ul>
@@ -86,7 +86,7 @@ $orders = $sessionTool->getAttribute('orders');
                     <small> 订单的跟进查看</small>
                 </h1>
                 <ol class="breadcrumb">
-                    <li><a href="admin_index.html"><i class="icon-dashboard"></i> 首页</a></li>
+                    <li><a href="admin_index.php"><i class="icon-dashboard"></i> 首页</a></li>
                     <li class="active"><i class="icon-file-alt"></i> 添加商品</li>
                 </ol>
             </div>

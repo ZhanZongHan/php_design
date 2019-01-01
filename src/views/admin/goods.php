@@ -58,13 +58,13 @@ if ($sesssionTool->isExist('goods_classes')) {
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="admin_index.html">后台管理</a>
+            <a class="navbar-brand" href="admin_index.php">后台管理</a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse navbar-ex1-collapse">
             <ul class="nav navbar-nav side-nav">
-                <li><a href="admin_index.html"><i class="fa fa-dashboard"></i> 首页</a></li>
+                <li><a href="admin_index.php"><i class="fa fa-dashboard"></i> 首页</a></li>
                 <li>
                     <a href="../../controllers/orderController.php?type=show_all_orders&dst=admin/order.php&cur_page=<?php echo $cur_page ?>"><i
                                 class="fa fa-desktop"></i> 订单管理</a>
@@ -84,7 +84,7 @@ if ($sesssionTool->isExist('goods_classes')) {
                         <li><a href="#"><i class="fa fa-envelope"></i> Inbox <span class="badge">7</span></a></li>
                         <li><a href="#"><i class="fa fa-gear"></i> Settings</a></li>
                         <li class="divider"></li>
-                        <li><a href="../login/login.html"><i class="fa fa-power-off"></i> 退出登录</a></li>
+                        <li><a href="../login/admin_login.php"><i class="fa fa-power-off"></i> 退出登录</a></li>
                     </ul>
                 </li>
             </ul>
@@ -97,7 +97,7 @@ if ($sesssionTool->isExist('goods_classes')) {
                     <small> 商品的增删查改</small>
                 </h1>
                 <ol class="breadcrumb">
-                    <li><a href="admin_index.html"><i class="icon-dashboard"></i> 首页</a></li>
+                    <li><a href="admin_index.php"><i class="icon-dashboard"></i> 首页</a></li>
                     <li class="active"><i class="icon-file-alt"></i> 商品管理</li>
                 </ol>
             </div>
@@ -161,10 +161,9 @@ if ($sesssionTool->isExist('goods_classes')) {
                                 <div class="modal-footer">
                                     <a href="../../controllers/goodsController.php?type=delete_goods&dst=admin/goods.php&goods_id=<?php echo $goods->getGoodsId() ?>">
                                         <button type="button" class="btn btn-danger">确认删除</button>
-                                    </a></center>
+                                    </a>
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
                                 </div>
-
                             </div>
                         </div>
                     </div>
@@ -174,20 +173,19 @@ if ($sesssionTool->isExist('goods_classes')) {
         <ul class="pager">
             <?php if ($pager->getCurPage() == 1) { ?>
                 <li>
+                    <a href="../../controllers/goodsController.php?type=show_all_goodses&dst=admin/goods.php&cur_page=<?php echo $pager->getNextPage() ?>">下一页&rarr;</a>
+                </li>
+                <li>
+                    <a href="../../controllers/goodsController.php?type=show_all_goodses&dst=admin/goods.php&cur_page=<?php echo $pager->getTailPage() ?>">尾
+                        页</a>
+                </li>
+            <?php } else if ($pager->getCurPage() == $pager->getTotalPage()) { ?>
+                <li>
                     <a href="../../controllers/goodsController.php?type=show_all_goodses&dst=admin/goods.php&cur_page=<?php echo $pager->getHomePage() ?>">首
                         页</a>
                 </li>
                 <li>
-                    <a href="../../controllers/goodsController.php?type=show_all_goodses&dst=admin/goods.php&cur_page=<?php echo $pager->getNextPage() ?>">下一页&rarr;</a>
-                </li>
-
-            <?php } else if ($pager->getCurPage() == $pager->getTotalPage()) { ?>
-                <li>
                     <a href="../../controllers/goodsController.php?type=show_all_goodses&dst=admin/goods.php&cur_page=<?php echo $pager->getPrevPage() ?>">&larr;上一页</a>
-                </li>
-                <li>
-                    <a href="../../controllers/goodsController.php?type=show_all_goodses&dst=admin/goods.php&cur_page=<?php echo $pager->getTailPage() ?>">尾
-                        页&rarr;</a>
                 </li>
             <?php } else { ?>
                 <li>
@@ -202,7 +200,7 @@ if ($sesssionTool->isExist('goods_classes')) {
                 </li>
                 <li>
                     <a href="../../controllers/goodsController.php?type=show_all_goodses&dst=admin/goods.php&cur_page=<?php echo $pager->getTailPage() ?>">尾
-                        页&rarr;</a>
+                        页</a>
                 </li>
             <?php } ?>
         </ul>

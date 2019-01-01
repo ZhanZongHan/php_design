@@ -1,4 +1,12 @@
-﻿<!DOCTYPE html>
+﻿<?php
+$username = '';
+$password = '';
+if (isset($_COOKIE['username']) and isset($_COOKIE['password'])) {
+    $username = $_COOKIE['username'];
+    $password = $_COOKIE['password'];
+}
+?>
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
@@ -90,8 +98,9 @@
     <br/>
     <!--登录框-->
     <div id="login_container">
+
         <div id="lab1">
-            <span id="lab_login">用户登录</span>
+            <span id="lab_login">登录</span>
             <span id="lab_toRegist">
 				&emsp;还没有账号&nbsp;
 				<span id='toRegist' style="color: #EB9316;cursor: pointer;">立即注册</span>
@@ -101,13 +110,22 @@
             <span id="lab_type1">手机号/账号登录</span>
         </div>
         <div id="form_container1">
-            <br/>
-            <input type="text" class="form-control" placeholder="手机号/用户名" id="login_number" value="admin"/>
-            <input type="password" class="form-control" placeholder="密码" id="login_password"/>
-            <input type="button" value="登录" class="btn btn-success" id="login_btn"/>
-            <span id="rememberOrfindPwd">
+                <br/>
+                <input type="text" class="form-control" placeholder="手机号/用户名" id="login_number"
+                       value="<?php echo $username ?>" name="username" required="required"/>
+                <input type="password" class="form-control" placeholder="密码" id="login_password"
+                       value="<?php echo $password ?>" name="password" required="required"/>
+                <label class="radio-inline">
+                    <input type="radio" name="login_type" value="user" checked="checked">用户
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="login_type" value="admin">管理员
+                </label>
+                <input type="button" name="login_submit" value="登录" class="btn btn-success" id="login_btn"
+                 onclick="login()"/>
+                <span id="rememberOrfindPwd">
 				<span>
-					<input id="remember" type="checkbox" style="margin-bottom: -1.5px;">
+					<input name="remember_password" type="checkbox" style="margin-bottom: -1.5px;">
 				</span>
 			<span style="color:#000000">
 					记住密码&emsp;&emsp;&emsp;&emsp;
@@ -116,7 +134,9 @@
 					忘记密码
 				</span>
 			</span>
+                <input type="hidden" id="dst" name="dst" value="user/user_index.php">
         </div>
+
     </div>
     <!-- 会员注册 -->
     <div id='regist_container' style="display: none;">
@@ -171,6 +191,34 @@
             alert("暂停使用！");
         });
     });
+
+
+    function login() {
+        var xmlhttp;
+        var username = document.getElementById("login_number").value;
+        var password = document.getElementById("login_password").value;
+        var dst = document.getElementById("dst").value;
+        var remember_password = document.getElementsByName("remember_password")[0];
+        if(username.length == 0 || password.length == 0) {
+            return;
+        }
+        xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function () {
+            if (xmlhttp.readyState==4 && xmlhttp.status==200)
+            {
+                if (xmlhttp.responseText=="1") {
+                    window.location.href="../"+dst;
+                } else {
+                    alert("用户名或密码输入有误，请重新输入！");
+                    $('#login_number').addClass('alert alert-danger');
+                    $('#login_password').addClass('alert alert-danger');
+                }
+            }
+        };
+        xmlhttp.open("POST","../../controllers/adminController.php",true);
+        xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+        xmlhttp.send("username="+username+"&password="+password+"&dst="+dst+"&login_submit=1&remember_password="+remember_password.checked);
+    }
 </script>
 </body>
 </html>

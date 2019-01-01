@@ -7,7 +7,10 @@
  */
 include_once($_COOKIE['ABSPATH'] . '/src/controllers/GoodsController.php');
 include_once($_COOKIE['ABSPATH'] . '/src/controllers/OrderController.php');
+include_once($_COOKIE['ABSPATH'] . '/src/controllers/AdminController.php');
 $goodsController = new GoodsController();
+$orderController = new OrderController();
+$adminController = new AdminController();
 function get_goodses($cur_page)
 {
     global $goodsController;
@@ -67,4 +70,25 @@ function get_orders()
 
 function get_order_items()
 {
+}
+
+function get_admins()
+{
+    global $adminController;
+    return $adminController->findAdmins(array());
+}
+
+function get_admins_by_admin_name($admin_name)
+{
+    global $adminController;
+    $admin_attr['admin_name'] = $admin_name;
+    return $adminController->findAdmins($admin_attr);
+}
+
+function get_admins_by_adname_and_psword($admin_name, $password)
+{
+    global $adminController;
+    $admin_attr['admin_name'] = $admin_name;
+    $admin_attr['password'] = $password;
+    return $adminController->findAdmins($admin_attr);
 }

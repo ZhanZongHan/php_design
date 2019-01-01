@@ -24,24 +24,26 @@ class GoodsDao
     /**
      * 根据查询条件返回商品列表
      * @param array $where
+     * @param int $cur_page
      * @return array
      */
     public function findGoodses($where, $cur_page)
     {
-        $sql = "select * from `goods` limit " . (($cur_page - 1) * GoodsPager::$page_size) . ", " . GoodsPager::$page_size;
+        $sql = "select * from `goods`";
         if (count($where) > 0) {
             $key = array_keys($where)[0];
             switch ($key) {
-                case 'goods_id':
+                case 'goods_id' || 'goods_class_id':
                     $sql = $sql . " where " . $key . "=" . $where[$key];
                     break;
-                case 'goods_name' || 'goods_class_id':
+                case 'goods_name':
                     $sql = $sql . " where " . $key . "='" . $where[$key] . "'";
                     break;
                 default:
                     break;
             }
         }
+        $sql = $sql." limit " . (($cur_page - 1) * GoodsPager::$page_size) . ", " . GoodsPager::$page_size;
         $this->db->query($sql);
         $rs = $this->db->getRs();
         $goodses = array();
@@ -91,8 +93,8 @@ class GoodsDao
     public function modifyGoods($goods_attr)
     {
         $sql = sprintf("update `goods` set goods_name='%s', goods_stock=%d, goods_price=%f, 
-          goods_description='%s', goods_class_id=%d", $goods_attr['goods_name'], $goods_attr['goods_stock'], $goods_attr['goods_price'],
-            $goods_attr['goods_description'], $goods_attr['goods_class_id']);
+          goods_description='%s', goods_class_id=%d where goods_id=%d", $goods_attr['goods_name'], $goods_attr['goods_stock'], $goods_attr['goods_price'],
+            $goods_attr['goods_description'], $goods_attr['goods_class_id'], $goods_attr['goods_id']);
         $this->db->query($sql);
         return $goods_attr['goods_id'];
     }

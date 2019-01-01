@@ -44,18 +44,18 @@ if ($sesssionTool->isExist('goodsClasses')) {
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="admin_index.html">后台管理</a>
+            <a class="navbar-brand" href="admin_index.php">后台管理</a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse navbar-ex1-collapse">
             <ul class="nav navbar-nav side-nav">
-                <li class="active"><a href="admin_index.html"><i class="fa fa-dashboard"></i> 首页</a></li>
+                <li><a href="admin_index.php"><i class="fa fa-dashboard"></i> 首页</a></li>
                 <li><a href="../../controllers/orderController.php?type=show_all_orders&dst=admin/order.php"><i class="fa fa-desktop"></i> 订单管理</a>
                 </li>
                 <li><a href="#"><i class="fa fa-file"></i> 用户管理</a></li>
                 <li><a href="#"><i class="fa fa-table"></i> 报表统计</a></li>
-                <li><a href="../../controllers/goodsController.php?type=show_all_goodses&dst=admin/goods.php"><i class="fa fa-caret-square-o-down"></i>
+                <li class="active"><a href="../../controllers/goodsController.php?type=show_all_goodses&dst=admin/goods.php"><i class="fa fa-caret-square-o-down"></i>
                         商品管理</a></li>
             </ul>
 
@@ -68,7 +68,7 @@ if ($sesssionTool->isExist('goodsClasses')) {
                         <li><a href="#"><i class="fa fa-envelope"></i> Inbox <span class="badge">7</span></a></li>
                         <li><a href="#"><i class="fa fa-gear"></i> Settings</a></li>
                         <li class="divider"></li>
-                        <li><a href="../login/login.html"><i class="fa fa-power-off"></i> 退出登录</a></li>
+                        <li><a href="../login/admin_login.php"><i class="fa fa-power-off"></i> 退出登录</a></li>
                     </ul>
                 </li>
             </ul>
