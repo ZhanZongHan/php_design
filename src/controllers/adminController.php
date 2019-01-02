@@ -17,8 +17,8 @@ if (isset($_POST['login_submit'])) {
     $dst = $_POST['dst'];
     if (count($admins) > 0) {
         if ($_POST['remember_password']=='true') {
-            setcookie("username", $admin_name, time()+60*60*24);
-            setcookie("password", $password, time()+60*60*24);
+            setrawcookie("admin_username", $admin_name, time()+60*60*24, "/");
+            setrawcookie("admin_password", $password, time()+60*60*24, "/");
         }
         $admin = $admins[0];
         $sessionTool->admin_login();

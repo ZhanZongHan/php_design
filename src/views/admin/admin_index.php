@@ -1,12 +1,12 @@
 <?php
 include_once($_COOKIE['ABSPATH'] . '/src/tools/SessionTool.php');
 include_once($_COOKIE['ABSPATH'] . '/src/controllers/AdminController.php');
-$sesssionTool = new SessionTool();
-if (!$sesssionTool->isExist('ADMIN_LOGIN_SUCCESS'))
-    $sesssionTool->setAttribute('ADMIN_LOGIN_SUCCESS', false);
+$sessionTool = new SessionTool();
+if (!$sessionTool->isExist('ADMIN_LOGIN_SUCCESS'))
+    $sessionTool->setAttribute('ADMIN_LOGIN_SUCCESS', false);
 $admin = "";
-if ($sesssionTool->isExist("admin"))
-    $admin = $sesssionTool->getAttribute("admin");
+if ($sessionTool->isExist("admin"))
+    $admin = $sessionTool->getAttribute("admin");
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -73,7 +73,7 @@ if ($sesssionTool->isExist("admin"))
                             <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                             <li class="divider"></li>
-                            <li><a href="../../controllers/adminController.php?type=logout&dst=login/admin_login.php"><i class="fa fa-power-off"></i> 退出登录</a>
+                            <li><a href="../../controllers/adminController.php?type=logout&dst=login/admin_login.php"><i class="fa fa-power-off"></i> 退出账户</a>
                             </li>
                         </ul>
                     </li>

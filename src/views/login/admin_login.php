@@ -1,9 +1,9 @@
 <?php
 $username = '';
 $password = '';
-if (isset($_COOKIE['username']) and isset($_COOKIE['password'])) {
-    $username = $_COOKIE['username'];
-    $password = $_COOKIE['password'];
+if (isset($_COOKIE['admin_username']) and isset($_COOKIE['admin_password'])) {
+    $username = $_COOKIE['admin_username'];
+    $password = $_COOKIE['admin_password'];
 }
 ?>
 <!DOCTYPE html>
@@ -28,17 +28,17 @@ if (isset($_COOKIE['username']) and isset($_COOKIE['password'])) {
             <div>
                 <h2>管理员登录</h2>
                 <span><label>用户名</label></span>
-                <span><input type="text" id="username" class="textbox"></span>
+                <span><input type="text" id="username" class="textbox" value="<?php echo $username?>"></span>
             </div>
             <div>
                 <span><label>密码</label></span>
-                <span><input type="password" id="password" class="password alert alert-danger"></span>
+                <span><input type="password" id="password" class="password alert alert-danger" value="<?php echo $password?>"></span>
             </div>
             <div class="sign">
                 <input type="button" value="登录" class="submit" onclick="login()"/>
                 &nbsp;
                 <span>
-					<input name="remember_password" type="checkbox" style="margin-bottom: -1.5px;">
+					<input id="remember_password" type="checkbox" style="margin-bottom: -1.5px;">
 				</span>
                 <span style="color:#000000">
 					记住密码&emsp;&emsp;&emsp;&emsp;
@@ -55,7 +55,7 @@ if (isset($_COOKIE['username']) and isset($_COOKIE['password'])) {
         var username = document.getElementById("username").value;
         var password = document.getElementById("password").value;
         var dst = document.getElementById("dst").value;
-        var remember_password = document.getElementsByName("remember_password")[0];
+        var remember_password = $('#remember_password');
         if (username.length == 0 || password.length == 0) {
             alert("请输入用户名和密码！");
             return;
@@ -74,7 +74,7 @@ if (isset($_COOKIE['username']) and isset($_COOKIE['password'])) {
         };
         xmlhttp.open("POST", "../../controllers/adminController.php", true);
         xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xmlhttp.send("username=" + username + "&password=" + password + "&dst=" + dst + "&login_submit=1&remember_password=" + remember_password.checked);
+        xmlhttp.send("username=" + username + "&password=" + password + "&dst=" + dst + "&login_submit=1&remember_password=" + remember_password.is(":checked"));
     }
 </script>
 </body>

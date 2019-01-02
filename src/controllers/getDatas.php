@@ -98,7 +98,12 @@ function get_admins_by_adname_and_psword($admin_name, $password)
 function get_users_by_usname_and_psword($username, $password)
 {
     global $userController;
-    $user_attr['admin_name'] = $username;
+    $user_attr['username'] = $username;
     $user_attr['password'] = $password;
     return $userController->findUsers($user_attr);
+}
+
+function get_users() {
+    global $userController;
+    return $userController->findUsers(array());
 }
