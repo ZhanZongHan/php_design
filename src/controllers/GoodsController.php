@@ -31,7 +31,7 @@ class GoodsController
      * @param int $cur_page
      * @return array
      */
-    public function findGoodses($where, $cur_page)
+    public function findGoodses($where, $cur_page=1)
     {
         return $this->goodsDao->findGoodses($where, $cur_page);
     }

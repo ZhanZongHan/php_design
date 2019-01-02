@@ -24,7 +24,7 @@ if ($type == 'show_all_goodses') {
     $goods_class_id = $_GET['goods_class_id'];
     $goodses = get_goodses_by_goods_class_id($goods_class_id, $cur_page);
     $sessionTool->setAttribute('goodses', $goodses);
-    header("Location:../views/$dst?cur_page=$cur_page");
+    header("Location:../views/$dst?cur_page=$cur_page&from=by_goods_class_id&goods_class_id=$goods_class_id");
 } else if ($type == 'delete_goods') {
     // 删除商品
     $goods_id = $_GET['goods_id'];

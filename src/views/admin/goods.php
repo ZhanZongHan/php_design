@@ -22,6 +22,8 @@ if ($sesssionTool->isExist('goods_classes')) {
 } else {
     $goods_classes = get_goods_classes();
 }
+$from = '';
+(isset($_GET['from']) && $_GET['from'] = 'by_goods_class_id') ? $from = 'show_goodses_by_goods_class_id' : $from = 'show_all_goodses';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -129,11 +131,10 @@ if ($sesssionTool->isExist('goods_classes')) {
             <?php foreach ($goodses
                            as $goods) { ?>
                 <div class="col-sm-6 col-md-3">
-                    <a href="../../controllers/goodsController.php?type=show_goods_imgs_by_goods_id&dst=admin/goods_item.php&goods_id=<?php echo $goods->getGoodsId() ?>"
-                    ">
-                    <img width="260px" height="180px" class="img-circle"
-                         src="<?php echo $goods->getGoodsPrimaryImgUrl() ?>"
-                         alt="<?php echo $goods->getGoodsName() ?>">
+                    <a href="../../controllers/goodsController.php?type=show_goods_imgs_by_goods_id&dst=admin/goods_item.php&goods_id=<?php echo $goods->getGoodsId() ?>">
+                        <img width="260px" height="180px" class="img-circle"
+                             src="<?php echo $goods->getGoodsPrimaryImgUrl() ?>"
+                             alt="<?php echo $goods->getGoodsName() ?>">
                     </a>
                     <center>
                         <label type="button" class="btn btn-default btn-sm" style="text-shadow: black 5px 3px 3px;">
@@ -170,36 +171,46 @@ if ($sesssionTool->isExist('goods_classes')) {
                 </div>
             <?php } ?>
         </div>
+
         <ul class="pager">
+            共<span class="pagination pagination-sm"><?php echo $pager->getTotalPage() ?></span>页
             <?php if ($pager->getCurPage() == 1) { ?>
                 <li>
-                    <a href="../../controllers/goodsController.php?type=show_all_goodses&dst=admin/goods.php&cur_page=<?php echo $pager->getNextPage() ?>">下一页&rarr;</a>
+                    <a href="../../controllers/goodsController.php?type=<?php echo $from ?>&dst=admin/goods.php&cur_page=<?php echo $pager->getNextPage();
+                    if (isset($_GET['goods_class_id'])) echo "&goods_class_id=" . $_GET['goods_class_id'] ?>">下一页&rarr;</a>
                 </li>
                 <li>
-                    <a href="../../controllers/goodsController.php?type=show_all_goodses&dst=admin/goods.php&cur_page=<?php echo $pager->getTailPage() ?>">尾
+                    <a href="../../controllers/goodsController.php?type=<?php echo $from ?>&dst=admin/goods.php&cur_page=<?php echo $pager->getTailPage();
+                    if (isset($_GET['goods_class_id'])) echo "&goods_class_id=" . $_GET['goods_class_id'] ?>">尾
                         页</a>
                 </li>
             <?php } else if ($pager->getCurPage() == $pager->getTotalPage()) { ?>
                 <li>
-                    <a href="../../controllers/goodsController.php?type=show_all_goodses&dst=admin/goods.php&cur_page=<?php echo $pager->getHomePage() ?>">首
+                    <a href="../../controllers/goodsController.php?type=<?php echo $from ?>&dst=admin/goods.php&cur_page=<?php echo $pager->getHomePage();
+                    if (isset($_GET['goods_class_id'])) echo "&goods_class_id=" . $_GET['goods_class_id'] ?>">首
                         页</a>
                 </li>
                 <li>
-                    <a href="../../controllers/goodsController.php?type=show_all_goodses&dst=admin/goods.php&cur_page=<?php echo $pager->getPrevPage() ?>">&larr;上一页</a>
+                    <a href="../../controllers/goodsController.php?type=<?php echo $from ?>&dst=admin/goods.php&cur_page=<?php echo $pager->getPrevPage();
+                    if (isset($_GET['goods_class_id'])) echo "&goods_class_id=" . $_GET['goods_class_id'] ?>">&larr;上一页</a>
                 </li>
             <?php } else { ?>
                 <li>
-                    <a href="../../controllers/goodsController.php?type=show_all_goodses&dst=admin/goods.php&cur_page=<?php echo $pager->getHomePage() ?>">首
+                    <a href="../../controllers/goodsController.php?type=<?php echo $from ?>&dst=admin/goods.php&cur_page=<?php echo $pager->getHomePage();
+                    if (isset($_GET['goods_class_id'])) echo "&goods_class_id=" . $_GET['goods_class_id'] ?>">首
                         页</a>
                 </li>
                 <li>
-                    <a href="../../controllers/goodsController.php?type=show_all_goodses&dst=admin/goods.php&cur_page=<?php echo $pager->getPrevPage() ?>">&larr;上一页</a>
+                    <a href="../../controllers/goodsController.php?type=<?php echo $from ?>&dst=admin/goods.php&cur_page=<?php echo $pager->getPrevPage();
+                    if (isset($_GET['goods_class_id'])) echo "&goods_class_id=" . $_GET['goods_class_id'] ?>">&larr;上一页</a>
                 </li>
                 <li>
-                    <a href="../../controllers/goodsController.php?type=show_all_goodses&dst=admin/goods.php&cur_page=<?php echo $pager->getNextPage() ?>">下一页&rarr;</a>
+                    <a href="../../controllers/goodsController.php?type=<?php echo $from ?>&dst=admin/goods.php&cur_page=<?php echo $pager->getNextPage();
+                    if (isset($_GET['goods_class_id'])) echo "&goods_class_id=" . $_GET['goods_class_id'] ?>">下一页&rarr;</a>
                 </li>
                 <li>
-                    <a href="../../controllers/goodsController.php?type=show_all_goodses&dst=admin/goods.php&cur_page=<?php echo $pager->getTailPage() ?>">尾
+                    <a href="../../controllers/goodsController.php?type=<?php echo $from ?>&dst=admin/goods.php&cur_page=<?php echo $pager->getTailPage();
+                    if (isset($_GET['goods_class_id'])) echo "&goods_class_id=" . $_GET['goods_class_id'] ?>">尾
                         页</a>
                 </li>
             <?php } ?>

@@ -79,7 +79,7 @@ class AdminDao
     public function updateLoginTime($admin_id)
     {
         $timestamp = date("Y-m-d H:i:s");
-        $sql = "update `admin` set latest_login_time = $timestamp where admin_id = $admin_id";
+        $sql = "update `admin` set latest_login_time = '$timestamp' where admin_id = $admin_id";
         $this->db->query($sql);
         return $this->db->getRs();
     }

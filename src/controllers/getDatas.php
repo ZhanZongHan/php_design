@@ -8,20 +8,22 @@
 include_once($_COOKIE['ABSPATH'] . '/src/controllers/GoodsController.php');
 include_once($_COOKIE['ABSPATH'] . '/src/controllers/OrderController.php');
 include_once($_COOKIE['ABSPATH'] . '/src/controllers/AdminController.php');
+include_once($_COOKIE['ABSPATH'] . '/src/controllers/UserController.php');
 $goodsController = new GoodsController();
 $orderController = new OrderController();
 $adminController = new AdminController();
-function get_goodses($cur_page)
+$userController = new UserController();
+function get_goodses($cur_page=1)
 {
     global $goodsController;
     return $goodsController->findGoodses(array(), $cur_page);
 }
 
-function get_goodses_by_goods_id($goods_id)
+function get_goodses_by_goods_id($goods_id, $cur_page=1)
 {
     global $goodsController;
     $where['goods_id'] = $goods_id;
-    return $goodsController->findGoodses($where);
+    return $goodsController->findGoodses($where, $cur_page);
 }
 
 function get_goodses_by_goods_name($goods_name)
@@ -91,4 +93,12 @@ function get_admins_by_adname_and_psword($admin_name, $password)
     $admin_attr['admin_name'] = $admin_name;
     $admin_attr['password'] = $password;
     return $adminController->findAdmins($admin_attr);
+}
+
+function get_users_by_usname_and_psword($username, $password)
+{
+    global $userController;
+    $user_attr['admin_name'] = $username;
+    $user_attr['password'] = $password;
+    return $userController->findUsers($user_attr);
 }
