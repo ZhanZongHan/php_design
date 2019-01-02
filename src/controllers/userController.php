@@ -21,6 +21,9 @@ if (isset($_POST['login_submit'])) {
         if ($_POST['remember_password']=='true') {
             setcookie("username", $username, time()+60*60*24, "/");
             setcookie("password", $password, time()+60*60*24, "/");
+        } else {
+            setcookie("username", $username, time()-60*60*24, "/");
+            setcookie("password", $password, time()-60*60*24, "/");
         }
         $user = $users[0];
         $sessionTool->user_login();

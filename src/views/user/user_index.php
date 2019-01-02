@@ -1,7 +1,5 @@
 <?php
 include_once($_COOKIE['ABSPATH'] . '/src/views/user/head_model.php');
-include_once($_COOKIE['ABSPATH'] . '/src/tools/SessionTool.php');
-include_once($_COOKIE['ABSPATH'] . '/src/controllers/UserController.php');
 $sessionTool = new SessionTool();
 $head_icons = scandir($_COOKIE['ABSPATH'] . '/uploads/user_head_icon');
 $from = '';
@@ -80,6 +78,7 @@ if ($sessionTool->isExist("user"))
                     <div class="mega-dropdown-menu">
                         <div class="w3ls_vegetables">
                             <ul class="dropdown-menu drp-mnu">
+                                <li><a href="#">修改个人信息</a></li>
                                 <li><a href="../../controllers/userController.php?type=logout&dst=user/user_login.php">退出账户</a>
                                 </li>
                             </ul>
@@ -172,7 +171,7 @@ if ($sessionTool->isExist("user"))
                                 <figure>
                                     <div class="snipcart-item block">
                                         <div class="snipcart-thumb">
-                                            <a href="single.html"><img  height="155px" width="220px"
+                                            <a href="goods_item.php?goods_id=<?php echo $goods->getGoodsId()?>"><img  height="155px" width="220px"
                                                                        src="<?php echo $goods->getGoodsPrimaryImgUrl() ?>"/></a>
                                             <p><?php echo $goods->getGoodsName() ?></p>
                                             <h4>￥<?php echo $goods->getGoodsPrice() ?></h4>

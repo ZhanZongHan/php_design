@@ -8,7 +8,9 @@
 include_once($_COOKIE['ABSPATH'] . '/src/tools/SessionTool.php');
 include_once($_COOKIE['ABSPATH'] . '/src/tools/GoodsPager.php');
 include_once($_COOKIE['ABSPATH'] . '/src/controllers/GoodsController.php');
+include_once($_COOKIE['ABSPATH'] . '/src/controllers/UserController.php');
 include_once($_COOKIE['ABSPATH'] . '/src/controllers/getDatas.php');
+
 $sesssionTool = new SessionTool();
 isset($_GET['cur_page']) ? $cur_page = $_GET['cur_page'] : $cur_page = 1;
 $pager = new GoodsPager($cur_page);
