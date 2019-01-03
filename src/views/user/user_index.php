@@ -79,7 +79,8 @@ if ($sessionTool->isExist("user"))
                         <div class="w3ls_vegetables">
                             <ul class="dropdown-menu drp-mnu">
                                 <li><a href="#">修改个人信息</a></li>
-                                <li><a href="../../controllers/userController.php?type=logout&dst=user/user_login.php">退出账户</a>
+                                <li><a href="#">查看订单</a></li>
+                                <li><a id="logout_a" href="#">退出账户</a>
                                 </li>
                             </ul>
                         </div>
@@ -171,15 +172,19 @@ if ($sessionTool->isExist("user"))
                                 <figure>
                                     <div class="snipcart-item block">
                                         <div class="snipcart-thumb">
-                                            <a href="goods_item.php?goods_id=<?php echo $goods->getGoodsId()?>"><img  height="155px" width="220px"
-                                                                       src="<?php echo $goods->getGoodsPrimaryImgUrl() ?>"/></a>
+                                            <a href="goods_item.php?goods_id=<?php echo $goods->getGoodsId() ?>"><img
+                                                        height="155px" width="220px"
+                                                        src="<?php echo $goods->getGoodsPrimaryImgUrl() ?>"/></a>
                                             <p><?php echo $goods->getGoodsName() ?></p>
                                             <h4>￥<?php echo $goods->getGoodsPrice() ?></h4>
                                         </div>
                                         <div class="snipcart-details top_brand_home_details">
-                                            <button class="btn btn-danger my-cart-btn hvr-sweep-to-right" data-id="<?php echo $goods->getGoodsId() ?>"
-                                                    data-name="<?php echo $goods->getGoodsName() ?>" data-summary="summary 2"
-                                                    data-price="<?php echo $goods->getGoodsPrice() ?>" data-quantity="1" data-image="<?php echo $goods->getGoodsPrimaryImgUrl() ?>">Add
+                                            <button class="btn btn-danger my-cart-btn hvr-sweep-to-right"
+                                                    data-id="<?php echo $goods->getGoodsId() ?>"
+                                                    data-name="<?php echo $goods->getGoodsName() ?>"
+                                                    data-summary="<?php echo $goods->getGoodsDescription() ?>"
+                                                    data-price="<?php echo $goods->getGoodsPrice() ?>" data-quantity="1"
+                                                    data-image="<?php echo $goods->getGoodsPrimaryImgUrl() ?>">Add
                                                 to
                                                 Cart
                                             </button>
@@ -191,6 +196,7 @@ if ($sessionTool->isExist("user"))
                     </div>
                 </div>
             <?php } ?>
+
             <div class="clearfix"></div>
         </div>
         <ul class="pager">
@@ -198,7 +204,7 @@ if ($sessionTool->isExist("user"))
             <?php if ($pager->getCurPage() == 1) { ?>
                 <li>
                     <a href="../../controllers/goodsController.php?type=<?php echo $from ?>&dst=user/user_index.php&cur_page=<?php echo $pager->getNextPage();
-                    if (isset($_GET['goods_class_id'])) echo "&goods_class_id=" . $_GET['goods_class_id'] ?>">下一页&rarr;</a>
+                    if (isset($_GET['goods_class_id'])) echo "&goods_class_id=" . $_GET['goods_class_id'] ?>">下一页</a>
                 </li>
                 <li>
                     <a href="../../controllers/goodsController.php?type=<?php echo $from ?>&dst=user/user_index.php&cur_page=<?php echo $pager->getTailPage();
@@ -213,7 +219,7 @@ if ($sessionTool->isExist("user"))
                 </li>
                 <li>
                     <a href="../../controllers/goodsController.php?type=<?php echo $from ?>&dst=user/user_index.php&cur_page=<?php echo $pager->getPrevPage();
-                    if (isset($_GET['goods_class_id'])) echo "&goods_class_id=" . $_GET['goods_class_id'] ?>">&larr;上一页</a>
+                    if (isset($_GET['goods_class_id'])) echo "&goods_class_id=" . $_GET['goods_class_id'] ?>">上一页</a>
                 </li>
             <?php } else { ?>
                 <li>
@@ -223,11 +229,11 @@ if ($sessionTool->isExist("user"))
                 </li>
                 <li>
                     <a href="../../controllers/goodsController.php?type=<?php echo $from ?>&dst=user/user_index.php&cur_page=<?php echo $pager->getPrevPage();
-                    if (isset($_GET['goods_class_id'])) echo "&goods_class_id=" . $_GET['goods_class_id'] ?>">&larr;上一页</a>
+                    if (isset($_GET['goods_class_id'])) echo "&goods_class_id=" . $_GET['goods_class_id'] ?>">上一页</a>
                 </li>
                 <li>
                     <a href="../../controllers/goodsController.php?type=<?php echo $from ?>&dst=user/user_index.php&cur_page=<?php echo $pager->getNextPage();
-                    if (isset($_GET['goods_class_id'])) echo "&goods_class_id=" . $_GET['goods_class_id'] ?>">下一页&rarr;</a>
+                    if (isset($_GET['goods_class_id'])) echo "&goods_class_id=" . $_GET['goods_class_id'] ?>">下一页</a>
                 </li>
                 <li>
                     <a href="../../controllers/goodsController.php?type=<?php echo $from ?>&dst=user/user_index.php&cur_page=<?php echo $pager->getTailPage();
@@ -344,6 +350,7 @@ if ($sessionTool->isExist("user"))
             }
         );
     });
+
 </script>
 <!-- here stars scrolling icon -->
 <script type="text/javascript">
@@ -358,14 +365,12 @@ if ($sessionTool->isExist("user"))
         */
 
         $().UItoTop({easingType: 'easeOutQuart'});
-
     });
 </script>
 <!-- //here ends scrolling icon -->
 <script type='text/javascript' src="js/jquery.mycart.js"></script>
 <script type="text/javascript">
     $(function () {
-
         var goToCartIcon = function ($addTocartBtn) {
             var $cartIcon = $(".my-cart-icon");
             var $image = $('<img width="30px" height="30px" src="' + $addTocartBtn.data("image") + '"/>').css({
@@ -377,8 +382,11 @@ if ($sessionTool->isExist("user"))
             $image.animate({}, 500, "linear", function () {
                 $image.remove();
             });
-        }
-
+        };
+        <?php if (!$sessionTool->isExist('user')) {?>
+        $('.my-cart-btn').click(function () {
+            alert("请先登录在添加购物车！");
+        });<?php }else {?>
         $('.my-cart-btn').myCart({
             classCartIcon: 'my-cart-icon',
             classCartBadge: 'my-cart-badge',
@@ -390,6 +398,7 @@ if ($sessionTool->isExist("user"))
             },
             clickOnAddToCart: function ($addTocart) {
                 goToCartIcon($addTocart);
+
             },
             getDiscountPrice: function (products) {
                 var total = 0;
@@ -398,6 +407,20 @@ if ($sessionTool->isExist("user"))
                 });
                 return total * 1;
             }
+        });<?php }?>
+
+        $('#logout_a').logout({});
+
+        $('#settlement_button').click(function () {
+            var products = JSON.parse(sessionStorage.products);
+            $.each(products, function () {
+                alert(this.id);
+                alert(this.name);
+                alert(this.summary);
+                alert(this.price);
+                alert(this.quantity);
+                alert(this.image);
+            });
         });
 
     });

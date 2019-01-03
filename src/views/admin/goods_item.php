@@ -158,7 +158,7 @@ if ($sesssionTool->isExist('goods_classes')) {
                     <div class="form-group">
                         <label for="goods_id">商品id</label>
                         <input type="text" class="form-control" id="goods_id" name="goods_id"
-                               disabled="disabled" value="<?php echo $goods_item->getGoodsId() ?>">
+                               readonly value="<?php echo $goods_item->getGoodsId() ?>">
                     </div>
 
                     <div class="form-group">

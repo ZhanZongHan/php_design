@@ -103,7 +103,7 @@ if ($sessionTool->isExist("admin"))
         </div>
     </div><!-- /#page-wrapper -->
 </div><!-- /#wrapper -->
-<?php if (!$sesssionTool->admin_session_validate()) { ?>
+<?php if (!$sessionTool->admin_session_validate()) { ?>
     <script>
         $('#myModal').modal();
     </script>

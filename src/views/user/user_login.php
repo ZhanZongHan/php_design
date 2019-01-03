@@ -514,7 +514,6 @@ if (isset($_COOKIE['username']) and isset($_COOKIE['password'])) {
                 $image.remove();
             });
         };
-
         $('.my-cart-btn').myCart({
             classCartIcon: 'my-cart-icon',
             classCartBadge: 'my-cart-badge',

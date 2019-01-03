@@ -80,7 +80,6 @@ if ($type == 'show_all_goodses') {
     $goods_attr['goods_description'] = $_POST['goods_description'];
 
     $goods_id = $goodsController->modifyGoods($goods_attr);
-
     $dst = $_POST['dst'];
     header("Location:../controllers/goodsController.php?type=show_all_goodses&dst=" . $dst);
 } else if ($type == 'show_goods_imgs_by_goods_id') {

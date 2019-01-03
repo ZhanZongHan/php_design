@@ -25,7 +25,7 @@ foreach ($goodses as $goods) {
 if ($sesssionTool->isExist('goods_imgs')) {
     $goods_imgs = $sesssionTool->getAttribute('goods_imgs');
 } else {
-    $goods_imgs = get_goods_imgs();
+    $goods_imgs = get_goods_imgs_by_goods_id($goods_id);
 }
 if ($sesssionTool->isExist('goods_classes')) {
     $goods_classes = $sesssionTool->getAttribute('goods_classes');
@@ -387,7 +387,10 @@ if ($sesssionTool->isExist('goods_classes')) {
                 $image.remove();
             });
         }
-
+        <?php if (!$sessionTool->isExist('user')) {?>
+        $('.my-cart-btn').click(function () {
+            alert("请先登录在添加购物车！");
+        });<?php }else {?>
         $('.my-cart-btn').myCart({
             classCartIcon: 'my-cart-icon',
             classCartBadge: 'my-cart-badge',
@@ -407,7 +410,7 @@ if ($sesssionTool->isExist('goods_classes')) {
                 });
                 return total * 1;
             }
-        });
+        });<?php } ?>
 
     });
 </script>
