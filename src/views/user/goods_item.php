@@ -104,14 +104,40 @@ if ($sesssionTool->isExist('goods_classes')) {
                     <div class="mega-dropdown-menu">
                         <div class="w3ls_vegetables">
                             <ul class="dropdown-menu drp-mnu">
-                                <li><a href="#">修改个人信息</a></li>
-                                <li><a href="../../controllers/userController.php?type=logout&dst=user/user_login.php">退出账户</a>
+                                <li><a href="user_info.php">修改个人信息</a></li>
+                                <li><a style="cursor: pointer" id="search_user_order">查看订单</a></li>
+                                <li><a id="logout_a" href="#">退出账户</a>
                                 </li>
                             </ul>
                         </div>
                     </div>
                 </li>
             </ul>
+            <!-- 模态框 -->
+            <div class="modal fade" id="order_search">
+                <div class="modal-dialog modal-sm">
+                    <div class="modal-content">
+                        <!-- 模态框主体 -->
+                        <div class="modal-body">
+                            <table class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>订单编码</th>
+                                    <th>下单时间</th>
+                                    <th>订单状态</th>
+                                </tr>
+                                </thead>
+                                <tbody id="order_tbody">
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- 模态框底部 -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     <?php } else { ?>
         <div class="w3l_header_right">
@@ -375,6 +401,7 @@ if ($sesssionTool->isExist('goods_classes')) {
 <script type='text/javascript' src="js/jquery.mycart.js"></script>
 <script type="text/javascript">
     $(function () {
+        $('#logout_a').logout({});
 
         var goToCartIcon = function($addTocartBtn){
             var $cartIcon = $(".my-cart-icon");
@@ -412,6 +439,30 @@ if ($sesssionTool->isExist('goods_classes')) {
             }
         });<?php } ?>
 
+        $('#search_user_order').click(function () {
+            $('#order_tbody').html('');
+            var user_id = <?php echo $user->getUserId() ?>;
+            var xmlhttp = new XMLHttpRequest();
+            xmlhttp.open("POST", "../../controllers/orderController.php", true);
+            xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xmlhttp.send("find_orders_by_user_id=1&user_id=" + user_id);
+
+            xmlhttp.onreadystatechange = function () {
+                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                    var search_orders = JSON.parse(xmlhttp.responseText);
+                    $.each(search_orders, function () {
+                        $('#order_tbody').append(
+                            '<tr>' +
+                            '<td>' + this.order_code + '</td>' +
+                            '<td>' + this.order_time + '</td>' +
+                            '<td>' + this.order_state + '</td>' +
+                            '</tr>'
+                        );
+                    });
+                    $('#order_search').modal('toggle');
+                }
+            }
+        });
     });
 </script>
 </body>

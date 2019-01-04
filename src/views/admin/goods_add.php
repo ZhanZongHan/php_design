@@ -2,13 +2,17 @@
 include_once($_COOKIE['ABSPATH'] . '/src/tools/SessionTool.php');
 include_once($_COOKIE['ABSPATH'] . '/src/controllers/GoodsController.php');
 include_once($_COOKIE['ABSPATH'] . '/src/controllers/getDatas.php');
-$sesssionTool = new SessionTool();
-if ($sesssionTool->isExist('goodsClasses')) {
-    $goodsClasses = $sesssionTool->getAttribute('goodsClasses');
+$sessionTool = new SessionTool();
+if (!$sessionTool->admin_session_validate())
+    header("Location:../admin/admin_index.php");
+if ($sessionTool->isExist('goodsClasses')) {
+    $goodsClasses = $sessionTool->getAttribute('goodsClasses');
 } else {
     $goodsClasses = get_goods_classes();
 }
-
+$admin = "";
+if ($sessionTool->isExist("admin"))
+    $admin = $sessionTool->getAttribute("admin");
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -51,26 +55,36 @@ if ($sesssionTool->isExist('goodsClasses')) {
         <div class="collapse navbar-collapse navbar-ex1-collapse">
             <ul class="nav navbar-nav side-nav">
                 <li><a href="admin_index.php"><i class="fa fa-dashboard"></i> 首页</a></li>
-                <li><a href="../../controllers/orderController.php?type=show_all_orders&dst=admin/order.php"><i class="fa fa-desktop"></i> 订单管理</a>
+                <li><a href="../../controllers/orderController.php?type=show_all_orders&dst=admin/order.php"><i
+                                class="fa fa-desktop"></i> 订单管理</a>
                 </li>
-                <li><a href="#"><i class="fa fa-file"></i> 用户管理</a></li>
-                <li><a href="#"><i class="fa fa-table"></i> 报表统计</a></li>
-                <li class="active"><a href="../../controllers/goodsController.php?type=show_all_goodses&dst=admin/goods.php"><i class="fa fa-caret-square-o-down"></i>
+                <li><a href="../../controllers/userController.php?type=show_all_users&dst=admin/user.php"><i
+                                class="fa fa-file"></i> 用户管理</a></li>
+                <li class="active"><a
+                            href="../../controllers/goodsController.php?type=show_all_goodses&dst=admin/goods.php"><i
+                                class="fa fa-caret-square-o-down"></i>
                         商品管理</a></li>
             </ul>
 
             <ul class="nav navbar-nav navbar-right navbar-user">
-                <li class="dropdown user-dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> John Smith <b
-                                class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="#"><i class="fa fa-user"></i> Profile</a></li>
-                        <li><a href="#"><i class="fa fa-envelope"></i> Inbox <span class="badge">7</span></a></li>
-                        <li><a href="#"><i class="fa fa-gear"></i> Settings</a></li>
-                        <li class="divider"></li>
-                        <li><a href="../login/admin_login.php"><i class="fa fa-power-off"></i> 退出登录</a></li>
-                    </ul>
-                </li>
+                <?php if (!$admin) { ?>
+                    <li class="dropdown user-dropdown">
+                        <a href="../login/admin_login.php" class="dropdown-toggle">
+                            <i class="fa fa-power-off"></i> 登录
+                        </a></li>
+                <?php } else { ?>
+                    <li class="dropdown user-dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">欢迎您 ： <i
+                                    class="fa fa-user"></i> <?php echo $admin->getAdminName() ?>
+                            <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li class="divider"></li>
+                            <li><a href="../../controllers/adminController.php?type=logout&dst=login/admin_login.php"><i
+                                            class="fa fa-power-off"></i> 退出账户</a>
+                            </li>
+                        </ul>
+                    </li>
+                <?php } ?>
             </ul>
         </div><!-- /.navbar-collapse -->
     </nav>
@@ -81,7 +95,8 @@ if ($sesssionTool->isExist('goodsClasses')) {
                     <small> 商品的增删查改</small>
                 </h1>
                 <ol class="breadcrumb">
-                    <li><a href="../../controllers/goodsController.php?type=show_all_goodses&dst=admin/goods.php"><i class="icon-dashboard"></i>
+                    <li><a href="../../controllers/goodsController.php?type=show_all_goodses&dst=admin/goods.php"><i
+                                    class="icon-dashboard"></i>
                             商品管理</a></li>
                     <li class="active"><i class="icon-file-alt"></i> 添加商品</li>
                 </ol>

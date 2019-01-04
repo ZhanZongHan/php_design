@@ -2,30 +2,14 @@
 include_once($_COOKIE['ABSPATH'] . '/src/views/user/head_model.php');
 $sessionTool = new SessionTool();
 $head_icons = scandir($_COOKIE['ABSPATH'] . '/uploads/user_head_icon');
-if (!$sessionTool->isExist('USER_LOGIN_SUCCESS'))
-    $sessionTool->setAttribute('USER_LOGIN_SUCCESS', false);
 $user = "";
 if ($sessionTool->isExist("user"))
     $user = $sessionTool->getAttribute("user");
-if ($sessionTool->isExist('goodses')) {
-    $goodses = $sessionTool->getAttribute('goodses');
-} else {
-    $goodses = get_goodses();
-}
-$from = '';
-$where = array();
-if (isset($_GET['from']) && $_GET['from'] = 'by_goods_class_id') {
-    $from = 'show_goodses_by_goods_class_id';
-    $where['goods_class_id'] = $_GET['goods_class_id'];
-} else {
-    $from = 'show_all_goodses';
-}
-$pager = new GoodsPager($cur_page, $where);
 ?>
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Home</title>
+    <title>Sign In & Sign Up</title>
     <!-- for-mobile-apps -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
@@ -44,7 +28,7 @@ $pager = new GoodsPager($cur_page, $where);
     <link href="css/font-awesome.css" rel="stylesheet" type="text/css" media="all"/>
     <!-- //font-awesome icons -->
     <!-- js -->
-    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+    <script src="js/jquery-1.11.1.min.js"></script>
     <!-- start-smoth-scrolling -->
     <script type="text/javascript" src="js/move-top.js"></script>
     <script type="text/javascript" src="js/easing.js"></script>
@@ -63,8 +47,7 @@ $pager = new GoodsPager($cur_page, $where);
 <!-- header -->
 <div class="agileits_header">
     <div class="w3l_offers">
-        <a href="../../controllers/goodsController.php?type=show_all_goodses&dst=user/user_index.php">Today's special
-            Offers !</a>
+        <a href="products.html">Today's special Offers !</a>
     </div>
     <div class="w3l_search">
         <form action="#" method="post">
@@ -76,7 +59,7 @@ $pager = new GoodsPager($cur_page, $where);
     <div class="product_list_header">
         <div style="cursor: pointer;">
             <span class="glyphicon glyphicon-shopping-cart my-cart-icon"><i
-                        class="badge badge-notify my-cart-badge"></i></span>
+                    class="badge badge-notify my-cart-badge"></i></span>
         </div>
     </div>
     <?php if ($user) { ?>
@@ -86,7 +69,7 @@ $pager = new GoodsPager($cur_page, $where);
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">欢迎您 ： <i class="fa fa-user"
                                                                                         aria-hidden="true"></i><?php echo $user->getUsername() ?>
                         <span
-                                class="caret"></span></a>
+                            class="caret"></span></a>
                     <div class="mega-dropdown-menu">
                         <div class="w3ls_vegetables">
                             <ul class="dropdown-menu drp-mnu">
@@ -131,7 +114,7 @@ $pager = new GoodsPager($cur_page, $where);
                 <li class="dropdown profile_details_drop">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"
                                                                                   aria-hidden="true"></i><span
-                                class="caret"></span></a>
+                            class="caret"></span></a>
                     <div class="mega-dropdown-menu">
                         <div class="w3ls_vegetables">
                             <ul class="dropdown-menu drp-mnu">
@@ -188,123 +171,90 @@ $pager = new GoodsPager($cur_page, $where);
 <div class="products-breadcrumb">
     <div class="container">
         <ul>
-            <li><i class="fa fa-home" aria-hidden="true"></i><a
-                        href="../../controllers/goodsController.php?type=show_all_goodses&dst=user/user_index.php">Home</a><span>|</span>
-            </li>
-            <li>Single Page</li>
+            <li><i class="fa fa-home" aria-hidden="true"></i><a href="user_index.php">Home</a><span>|</span></li>
+            <li>个人信息</li>
         </ul>
     </div>
 </div>
 <!-- //products-breadcrumb -->
-<!-- top-brands -->
-<div class="top-brands">
-    <div class="container">
-        <h3>Hot Offers</h3>
-        <div class="agile_top_brands_grids">
-            <?php foreach ($goodses as $goods) { ?>
-                <div class="col-md-3 top_brand_left">
-                    <div class="hover14 column">
-                        <div class="agile_top_brand_left_grid">
-                            <div class="agile_top_brand_left_grid1">
-                                <figure>
-                                    <div class="snipcart-item block">
-                                        <div class="snipcart-thumb">
-                                            <a href="goods_item.php?goods_id=<?php echo $goods->getGoodsId() ?>"><img
-                                                        height="155px" width="220px"
-                                                        src="<?php echo $goods->getGoodsPrimaryImgUrl() ?>"/></a>
-                                            <p align="center"><?php echo $goods->getGoodsName() ?></p>
-                                            <p align="center">库存量：<?php echo $goods->getGoodsStock() ?></p>
-                                            <p align="center"><b>￥<?php echo $goods->getGoodsPrice() ?></b></p>
-                                        </div>
-                                        <div class="snipcart-details top_brand_home_details">
-                                            <button class="btn btn-danger my-cart-btn hvr-sweep-to-right"
-                                                    data-id="<?php echo $goods->getGoodsId() ?>"
-                                                    data-name="<?php echo $goods->getGoodsName() ?>"
-                                                    data-summary="<?php echo $goods->getGoodsDescription() ?>"
-                                                    data-price="<?php echo $goods->getGoodsPrice() ?>" data-quantity="1"
-                                                    data-image="<?php echo $goods->getGoodsPrimaryImgUrl() ?>">Add
-                                                to
-                                                Cart
-                                            </button>
-                                        </div>
+<!-- banner -->
+<div class="banner">
+
+    <!-- login -->
+    <div class="w3_login">
+        <h3>个人信息</h3>
+        <div class="w3_login_module">
+            <div class="module form-module">
+                <div class="form">
+                </div>
+                <div class="form">
+                    <form id="modify_form">
+                        <input type="text" name="username" id="username" value="<?php echo $user->getUsername() ?>" required=" ">
+                        <input type="email" name="email" id="email" value="<?php echo $user->getEmail() ?>" required=" ">
+                        <input type="text" name="telephone" id="telephone" value="<?php echo $user->getTelephone() ?>" required=" ">
+                        <button type="button" data-toggle="modal" data-target="#myModal">点击选择头像</button>
+                        <span><img id="head_icon_img" src="../../../uploads/user_head_icon/<?php echo $user->getHeadIcon() ?>"
+                                   name="head_icon" height="60px" width="60px"></span>
+                        <!-- 模态框（Modal） -->
+                        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                             aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-body">
+                                        <img width="100px" height="100px"
+                                             src="../../../uploads/user_head_icon/<?php echo $head_icons[2] ?>">
+                                        <input type="radio" name="head_icon_radio" name="head_icon"
+                                               value="<?php echo $head_icons[2] ?>" checked="checked">
+                                        <?php
+                                        $count = 1;
+                                        for ($i = 3; $i < count($head_icons); $i++, $count++) { ?>
+                                            <img width="100px" height="100px"
+                                                 src="../../../uploads/user_head_icon/<?php echo $head_icons[$i] ?>">
+                                            <input type="radio" name="head_icon_radio" name="head_icon"
+                                                   value="<?php echo $head_icons[$i] ?>">
+                                            <?php if ($count % 5 == 0) {
+                                                echo "</br>";
+                                            }
+                                        } ?>
                                     </div>
-                                </figure>
+                                    <div class="modal-footer">
+                                        <button type="button" id="yes" class="btn btn-primary"
+                                                onclick="choose_head_icon()" data-dismiss="modal">确认
+                                        </button>
+                                    </div>
+                                </div><!-- /.modal-content -->
+                            </div><!-- /.modal -->
+                        </div>
+                        <input type="hidden" id="head_icon">
+                        <div class="">
+                            <br>
+                            请选择地址：
+                            <div data-toggle="distpicker">
+                                <div class="form-group">
+                                    <label class="sr-only" for="province1">Province</label>
+                                    <select class="form-control" id="province1"></select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="sr-only" for="city1">City</label>
+                                    <select class="form-control" id="city1"></select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="sr-only" for="district1">District</label>
+                                    <select class="form-control" id="district1"></select>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-            <?php } ?>
-            <!-- 结算框 -->
-            <div class="modal fade" id="settlement">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <!-- 模态框头部 -->
-                        <div class="modal-header">
-                            <h4 class="modal-title">操作提示</h4>
-                        </div>
-                        <!-- 模态框主体 -->
-                        <div class="modal-body">
-                            <h5>是否确认结算</h5>
-                        </div>
-                        <!-- 模态框底部 -->
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-primary" id="settlement_button" data-toggle="modal"
-                                    data-target="#settlement">结&nbsp;算
-                            </button>
-                            <button type="button" class="btn btn-default" data-dismiss="modal">关&nbsp;闭</button>
-                        </div>
-                    </div>
-
+                        <input type="submit" id="modify" value="修改">
+                    </form>
                 </div>
             </div>
         </div>
     </div>
+    <!-- //login -->
+
     <div class="clearfix"></div>
 </div>
-<ul class="pager">
-    共<span class="pagination pagination-sm"><?php echo $pager->getTotalPage() ?></span>页
-    <?php if ($pager->getCurPage() == 1) { ?>
-        <li>
-            <a href="../../controllers/goodsController.php?type=<?php echo $from ?>&dst=user/user_index.php&cur_page=<?php if ($pager->getNextPage()) echo $cur_page + 1; else echo $pager->getTotalPage();
-            if (isset($_GET['goods_class_id'])) echo "&goods_class_id=" . $_GET['goods_class_id'] ?>">下一页</a>
-        </li>
-        <li>
-            <a href="../../controllers/goodsController.php?type=<?php echo $from ?>&dst=user/user_index.php&cur_page=<?php echo $pager->getTotalPage();
-            if (isset($_GET['goods_class_id'])) echo "&goods_class_id=" . $_GET['goods_class_id'] ?>">尾
-                页</a>
-        </li>
-    <?php } else if ($pager->getCurPage() == $pager->getTotalPage()) { ?>
-        <li>
-            <a href="../../controllers/goodsController.php?type=<?php echo $from ?>&dst=user/user_index.php&cur_page=<?php echo 1;
-            if (isset($_GET['goods_class_id'])) echo "&goods_class_id=" . $_GET['goods_class_id'] ?>">首
-                页</a>
-        </li>
-        <li>
-            <a href="../../controllers/goodsController.php?type=<?php echo $from ?>&dst=user/user_index.php&cur_page=<?php if ($pager->getPrevPage()) echo $cur_page - 1; else echo 1;
-            if (isset($_GET['goods_class_id'])) echo "&goods_class_id=" . $_GET['goods_class_id'] ?>">上一页</a>
-        </li>
-    <?php } else { ?>
-        <li>
-            <a href="../../controllers/goodsController.php?type=<?php echo $from ?>&dst=user/user_index.php&cur_page=<?php echo 1;
-            if (isset($_GET['goods_class_id'])) echo "&goods_class_id=" . $_GET['goods_class_id'] ?>">首
-                页</a>div
-        </li>
-        <li>
-            <a href="../../controllers/goodsController.php?type=<?php echo $from ?>&dst=user/user_index.php&cur_page=<?php if ($pager->getPrevPage()) echo $cur_page - 1; else echo 1;
-            if (isset($_GET['goods_class_id'])) echo "&goods_class_id=" . $_GET['goods_class_id'] ?>">上一页</a>
-        </li>
-        <li>
-            <a href="../../controllers/goodsController.php?type=<?php echo $from ?>&dst=user/user_index.php&cur_page=<?php if ($pager->getNextPage()) echo $cur_page + 1; else echo $pager->getTotalPage();
-            if (isset($_GET['goods_class_id'])) echo "&goods_class_id=" . $_GET['goods_class_id'] ?>">下一页</a>
-        </li>
-        <li>
-            <a href="../../controllers/goodsController.php?type=<?php echo $from ?>&dst=user/user_index.php&cur_page=<?php echo $pager->getTotalPage();
-            if (isset($_GET['goods_class_id'])) echo "&goods_class_id=" . $_GET['goods_class_id'] ?>">尾
-                页</a>
-        </li>
-    <?php } ?>
-</ul>
-
+<!-- //banner -->
 <!-- newsletter -->
 <div class="newsletter">
     <div class="container">
@@ -357,11 +307,11 @@ $pager = new GoodsPager($cur_page, $where);
             <h3>twitter posts</h3>
             <ul class="w3_footer_grid_list1">
                 <li><label class="fa fa-twitter" aria-hidden="true"></label><i>01 day ago</i><span>Non numquam <a
-                                href="#">http://sd.ds/13jklf#</a>
+                            href="#">http://sd.ds/13jklf#</a>
 						eius modi tempora incidunt ut labore et
 						<a href="#">http://sd.ds/1389kjklf#</a>quo nulla.</span></li>
                 <li><label class="fa fa-twitter" aria-hidden="true"></label><i>02 day ago</i><span>Con numquam <a
-                                href="#">http://fd.uf/56hfg#</a>
+                            href="#">http://fd.uf/56hfg#</a>
 						eius modi tempora incidunt ut labore et
 						<a href="#">http://fd.uf/56hfg#</a>quo nulla.</span></li>
             </ul>
@@ -388,11 +338,6 @@ $pager = new GoodsPager($cur_page, $where);
             </div>
             <div class="clearfix"></div>
         </div>
-        <div class="wthree_footer_copy">
-            <p>Copyright &copy; 2016.Company name All rights reserved.More Templates <a href="http://www.cssmoban.com/"
-                                                                                        target="_blank" title="模板之家">模板之家</a>
-                - Collect from <a href="http://www.cssmoban.com/" title="网页模板" target="_blank">网页模板</a></p>
-        </div>
     </div>
 </div>
 <!-- //footer -->
@@ -411,8 +356,9 @@ $pager = new GoodsPager($cur_page, $where);
             }
         );
     });
-
 </script>
+<script type="text/javascript" id="snipcart" src="js/snipcart.js"
+        data-api-key="ZGQxNzVjZTItOWRmNS00YjJhLTlmNGUtMDE4NjdiY2RmZGNj"></script>
 <!-- here stars scrolling icon -->
 <script type="text/javascript">
     $(document).ready(function () {
@@ -426,12 +372,18 @@ $pager = new GoodsPager($cur_page, $where);
         */
 
         $().UItoTop({easingType: 'easeOutQuart'});
+
     });
 </script>
 <!-- //here ends scrolling icon -->
 <script type='text/javascript' src="js/jquery.mycart.js"></script>
 <script type="text/javascript">
     $(function () {
+        $('#logout_a').logout({});
+        var address = "<?php echo $user->getAddress()?>".split("/");
+        $('#province1').val(address[0]);
+        $('#city1').val(address[1]);
+        $('#district1').val(address[2]);
         var goToCartIcon = function ($addTocartBtn) {
             var $cartIcon = $(".my-cart-icon");
             var $image = $('<img width="30px" height="30px" src="' + $addTocartBtn.data("image") + '"/>').css({
@@ -444,10 +396,6 @@ $pager = new GoodsPager($cur_page, $where);
                 $image.remove();
             });
         };
-        <?php if (!$sessionTool->isExist('user')) {?>
-        $('.my-cart-btn').click(function () {
-            alert("请先登录在添加购物车！");
-        });<?php }else {?>
         $('.my-cart-btn').myCart({
             classCartIcon: 'my-cart-icon',
             classCartBadge: 'my-cart-badge',
@@ -459,7 +407,6 @@ $pager = new GoodsPager($cur_page, $where);
             },
             clickOnAddToCart: function ($addTocart) {
                 goToCartIcon($addTocart);
-
             },
             getDiscountPrice: function (products) {
                 var total = 0;
@@ -468,10 +415,7 @@ $pager = new GoodsPager($cur_page, $where);
                 });
                 return total * 1;
             }
-        });<?php }?>
-
-        $('#logout_a').logout({});
-
+        });
         $('#settlement_button').click(function () {
             var xmlhttp;
             xmlhttp = new XMLHttpRequest();
@@ -516,9 +460,65 @@ $pager = new GoodsPager($cur_page, $where);
                 }
             }
         });
+        $("#modify_form").validate({
+            rules: {
+                email: {
+                    required: true,
+                    email: true
+                },
+                telephone: {
+                    required: true,
+                    digits: true,
+                    minlength: 11,
+                    maxlength: 11
+                }
+            },
+            messages: {
+                email: {
+                    required: "邮箱不能为空",
+                    email: "邮箱格式不正确"
+                },
+                telephone: {
+                    required: "电话不能为空",
+                    minlength: "电话长度为11位",
+                    maxlength: "电话长度为11位"
+                }
+            },
+            submitHandler: function (form) {alert(1);
+                var xmlhttp;
+                var telephone = $('#telephone').val();
+                var email = $('#email').val();
+                var head_icon = $('#head_icon').val();
+                var province = $('#province1').val();
+                var city = $('#city1').val();
+                var district = $('#district1').val();
+                var address = province + "/" + city + "/" + district;
+                xmlhttp = new XMLHttpRequest();
+                xmlhttp.onreadystatechange = function () {
+                    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                        if (xmlhttp.responseText != "0") {
 
+                            alert("修改成功");
+                            window.location.href = "user_info.php";
+                        } else {
+                            alert("修改失败！");
+                            return;
+                        }
+                    }
+                };
+                var item = "user_id=<?php echo $user->getUserId()?>&telephone=" + telephone
+                    + "&email=" + email + "&head_icon=" + head_icon + "&address=" + address + "&modify=1";
+                xmlhttp.open("POST", "../../controllers/userController.php", true);
+                xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                xmlhttp.send(item);
+            }
+        });
     });
-
 </script>
+<script src="js/distpicker.data.js"></script>
+<script src="js/distpicker.js"></script>
+<script src="js/main.js"></script>
+<script src="http://static.runoob.com/assets/jquery-validation-1.14.0/dist/jquery.validate.min.js"></script>
+<script src="http://static.runoob.com/assets/jquery-validation-1.14.0/dist/localization/messages_zh.js"></script>
 </body>
 </html>

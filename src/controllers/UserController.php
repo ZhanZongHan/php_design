@@ -18,11 +18,12 @@ class UserController
 
     /**
      * @param array $user_attr
+     * @param int $cur_page
      * @return array
      */
-    public function findUsers($user_attr)
+    public function findUsers($user_attr, $cur_page=1)
     {
-        return $this->userDao->findUsers($user_attr);
+        return $this->userDao->findUsers($user_attr, $cur_page);
     }
 
     /**
@@ -44,11 +45,27 @@ class UserController
     }
 
     /**
+     * @param int $user_id
+     */
+    public function deleteUser($user_id)
+    {
+        return $this->userDao->deleteUser($user_id);
+    }
+
+    /**
      * @param string $username
      * @return int
      */
     public function isExistUsername($username)
     {
         return $this->userDao->isExistUsername($username);
+    }
+
+    /**
+     * @return int
+     */
+    public function getCounts()
+    {
+        return $this->userDao->getCounts();
     }
 }

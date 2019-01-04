@@ -72,8 +72,20 @@ function get_orders($cur_page)
     return $orderController->findOrders(array(), $cur_page);
 }
 
+function get_orders_by_order_id($order_id)
+{
+    global $orderController;
+    $where['order_id'] = $order_id;
+    return $orderController->findOrders($where, 0);
+}
+
 function get_order_items()
 {
+}
+
+function get_order_items_by_order_id($order_id) {
+    global $orderController;
+    return $orderController->findOrderItems(array(), $cur_page);
 }
 
 function get_admins()
@@ -105,7 +117,7 @@ function get_users_by_usname_and_psword($username, $password)
     return $userController->findUsers($user_attr);
 }
 
-function get_users() {
+function get_users($cur_page) {
     global $userController;
-    return $userController->findUsers(array());
+    return $userController->findUsers(array(), $cur_page);
 }

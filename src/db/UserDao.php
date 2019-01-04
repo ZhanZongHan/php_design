@@ -19,9 +19,10 @@ class UserDao
 
     /**
      * @param array $where
+     * @param int $cur_page
      * @return array
      */
-    public function findUsers($where)
+    public function findUsers($where, $cur_page=1)
     {
         $sql = "select * from `user`";
         $i = 0;
@@ -42,6 +43,7 @@ class UserDao
             }
             $i++;
         }
+        $sql = $sql." limit " . (($cur_page - 1) * GoodsPager::$page_size) . ", " . GoodsPager::$page_size;
         $this->db->query($sql);
         $rs = $this->db->getRs();
         $users = array();
@@ -84,7 +86,7 @@ class UserDao
     public function updateLoginTime($user_id)
     {
         $timestamp = date("Y-m-d H:i:s");
-        $sql = "update `user` set latest_login_time = '$timestamp' where admin_id = $user_id";
+        $sql = "update `user` set latest_login_time = '$timestamp' where user_id = $user_id";
         $this->db->query($sql);
         return $this->db->getRs();
     }
@@ -95,11 +97,11 @@ class UserDao
      */
     public function modifyUser($user_attr)
     {
-        $sql = sprintf("update `user` set username='%s', password='%s', email='%s', telephone='%s',
-              address='%s', head_icon='%s' where user_id = %d", $user_attr['user'], $user_attr['password'], $user_attr['email'],
-            $user_attr['telephone'], $user_attr['address'], $user_attr['head_icon'], $user_attr['admin_id']);
+        $sql = sprintf("update `user` set email='%s', telephone='%s',
+              address='%s', head_icon='%s' where user_id = %d", $user_attr['email'],
+            $user_attr['telephone'], $user_attr['address'], $user_attr['head_icon'], $user_attr['user_id']);
         $this->db->query($sql);
-        return $user_attr['admin_id'];
+        return $user_attr['user_id'];
     }
 
     /**
@@ -115,5 +117,27 @@ class UserDao
             return $row['user_id'];
         }
         return 0;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCounts()
+    {
+        $sql = "select count(*) as counts from `user`";
+        $this->db->query($sql);
+        $rs = $this->db->getRs();
+        $row = $rs->fetch_array();
+        return $row['counts'];
+    }
+
+    /**
+     * @param int $user_id
+     * @return int
+     */
+    public function deleteUser($user_id) {
+        $sql = "delete from `user` where user_id=$user_id";
+        $this->db->query($sql);
+        return $this->db->getRs();
     }
 }

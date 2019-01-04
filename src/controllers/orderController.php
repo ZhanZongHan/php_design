@@ -51,7 +51,47 @@ if ($type == 'show_all_orders') {
             $orders = $orderController->findOrders(array('user_id' => $value), 0);
             break;
     }
-  //  var_dump($orders);
-    $sessionTool->setAttribute("search_orders", $orders);
-    echo 1;
+    $orders_array = array();
+    for ($i=0; $i<count($orders);$i++) {
+        $orders_array[$i] = array();
+        $orders_array[$i]['order_id'] = $orders[$i]->getOrderId();
+        $orders_array[$i]['order_code'] = $orders[$i]->getOrderCode();
+        $orders_array[$i]['total_price'] = $orders[$i]->getTotalPrice();
+        $orders_array[$i]['user_addr'] = $orders[$i]->getUserAddr();
+        $orders_array[$i]['user_phone'] = $orders[$i]->getUserPhone();
+        $orders_array[$i]['order_state'] = $orders[$i]->getOrderState();
+        $orders_array[$i]['user_id'] = $orders[$i]->getUserId();
+        $orders_array[$i]['order_time'] = $orders[$i]->getOrderTime();
+    }
+//    var_dump($orders_array);
+//    $sessionTool->setAttribute("search_orders", $orders);
+    echo json_encode($orders_array);
+} else if ($type == "find_order_and_item") {
+    $dst = $_GET['dst'];
+    $order_id = $_GET['order_id'];
+    $search_order = get_orders_by_order_id($order_id)[0];
+    $sessionTool->setAttribute('search_order', $search_order);
+    header("Location:../views/$dst");
+}else if (isset($_POST['modify_order_state'])) {
+    $order_id = $_POST['order_id'];
+    $order_state = $_POST['order_state'];
+    $orderController->modify_order_state($order_id, $order_state);
+} else if (isset($_POST['find_orders_by_user_id'])) {
+    $user_id = $_POST['user_id'];
+    $orders = array();
+    $orders = $orderController->findOrders(array('user_id' => $user_id), 0);
+    $orders_array = array();
+    for ($i=0; $i<count($orders);$i++) {
+        $orders_array[$i] = array();
+        $orders_array[$i]['order_id'] = $orders[$i]->getOrderId();
+        $orders_array[$i]['order_code'] = $orders[$i]->getOrderCode();
+        $orders_array[$i]['total_price'] = $orders[$i]->getTotalPrice();
+        $orders_array[$i]['user_addr'] = $orders[$i]->getUserAddr();
+        $orders_array[$i]['user_phone'] = $orders[$i]->getUserPhone();
+        $orders_array[$i]['order_state'] = $orders[$i]->getOrderState();
+        $orders_array[$i]['user_id'] = $orders[$i]->getUserId();
+        $orders_array[$i]['order_time'] = $orders[$i]->getOrderTime();
+    }
+//    var_dump($orders_array);
+    echo json_encode($orders_array);
 }

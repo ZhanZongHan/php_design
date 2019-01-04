@@ -11,7 +11,7 @@ abstract class Pager
     protected $cur_page;  // 当前页数，默认首页
     protected $total_page; // 总页数
 
-    abstract protected function getCounts();    // 从数据库里过得总数，仅在构造方法里执行一次
+    abstract protected function getCounts($where);    // 从数据库里获得总数，仅在构造方法里执行一次
 
     public function getNextPage()
     {

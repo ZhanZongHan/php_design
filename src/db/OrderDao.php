@@ -32,7 +32,10 @@ class OrderDao
         if (count($where) > 0) {
             $key = array_keys($where)[0];
             switch ($key) {
-                case 'order_id' || 'user_id':
+                case 'order_id':
+                    $sql = $sql . " where " . $key . "=" . $where[$key];
+                    break;
+                case 'user_id':
                     $sql = $sql . " where " . $key . "=" . $where[$key];
                     break;
                 case 'order_code':
@@ -98,5 +101,16 @@ class OrderDao
         $rs = $this->db->getRs();
         $row = $rs->fetch_array();
         return $row['counts'];
+    }
+
+    /**
+     * @param int $order_id
+     * @param int $order_state
+     * @return bool
+     */
+    public function modify_order_state($order_id, $order_state) {
+        $sql = "update `order` set order_state='$order_state' where order_id=$order_id";
+        $this->db->query($sql);
+        return $this->db->getRs();
     }
 }

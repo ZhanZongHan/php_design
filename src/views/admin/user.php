@@ -6,20 +6,20 @@
  * Time: 下午7:08
  */
 include_once($_COOKIE['ABSPATH'] . '/src/tools/SessionTool.php');
-include_once($_COOKIE['ABSPATH'] . '/src/tools/OrderPager.php');
-include_once($_COOKIE['ABSPATH'] . '/src/controllers/OrderController.php');
+include_once($_COOKIE['ABSPATH'] . '/src/tools/UserPager.php');
+include_once($_COOKIE['ABSPATH'] . '/src/controllers/UserController.php');
 include_once($_COOKIE['ABSPATH'] . '/src/controllers/getDatas.php');
 $sessionTool = new SessionTool();
-$orderController = new OrderController();
+$userController = new UserController();
 if (!$sessionTool->admin_session_validate())
     header("Location:../admin/admin_index.php");
 isset($_GET['cur_page']) ? $cur_page = $_GET['cur_page'] : $cur_page = 1;
-$pager = new OrderPager($cur_page);
-$from = 'show_all_orders';
-if ($sessionTool->isExist('$orders')) {
-    $orders = $sessionTool->getAttribute('orders');
+$pager = new UserPager($cur_page);
+$from = 'show_all_users';
+if ($sessionTool->isExist('users')) {
+    $users = $sessionTool->getAttribute('users');
 } else {
-    $orders = get_orders($cur_page);
+    $users = get_orders($cur_page);
 }
 $admin = "";
 if ($sessionTool->isExist("admin"))
@@ -67,11 +67,12 @@ if ($sessionTool->isExist("admin"))
         <div class="collapse navbar-collapse navbar-ex1-collapse">
             <ul class="nav navbar-nav side-nav">
                 <li><a href="admin_index.php"><i class="fa fa-dashboard"></i> 首页</a></li>
-                <li class="active"><a
+                <li><a
                             href="../../controllers/orderController.php?type=show_all_orders&dst=admin/order.php"><i
                                 class="fa fa-desktop"></i> 订单管理</a>
                 </li>
-                <li><a href="../../controllers/userController.php?type=show_all_users&dst=admin/user.php"><i
+                <li class="active"><a
+                            href="../../controllers/userController.php?type=show_all_users&dst=admin/user.php"><i
                                 class="fa fa-file"></i> 用户管理</a></li>
                 <li><a href="../../controllers/goodsController.php?type=show_all_goodses&dst=admin/goods.php"><i
                                 class="fa fa-caret-square-o-down"></i>
@@ -103,12 +104,12 @@ if ($sessionTool->isExist("admin"))
     <div id="page-wrapper">
         <div class="row">
             <div>
-                <h1>订单管理
-                    <small> 订单的跟进查看</small>
+                <h1>用户管理
+                    <small> 用户的跟进查看</small>
                 </h1>
                 <ol class="breadcrumb">
                     <li><a href="admin_index.php"><i class="icon-dashboard"></i> 首页</a></li>
-                    <li class="active"><i class="icon-file-alt"></i> 订单管理</li>
+                    <li class="active"><i class="icon-file-alt"></i> 用户管理</li>
                 </ol>
             </div>
         </div>
@@ -131,56 +132,31 @@ if ($sessionTool->isExist("admin"))
                     </div>
                 </div>
             </div>
-            <!-- 模态框 -->
-            <div class="modal fade" id="order_search">
-                <div class="modal-dialog modal-sm">
-                    <div class="modal-content">
-                        <!-- 模态框主体 -->
-                        <div class="modal-body">
-                            <table class="table table-bordered">
-                                <thead>
-                                <tr>
-                                    <th>订单id</th>
-                                    <th>订单编码</th>
-                                    <th>下单时间</th>
-                                    <th>订单状态</th>
-                                    <th>订单用户id</th>
-                                </tr>
-                                </thead>
-                                <tbody id="order_tbody">
-                                </tbody>
-                            </table>
-                        </div>
-                        <!-- 模态框底部 -->
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
         <br>
         <div class="row">
             <table class="table table-bordered">
                 <thead>
                 <tr>
-                    <th>订单id</th>
-                    <th>订单编码</th>
-                    <th>下单时间</th>
-                    <th>订单状态</th>
-                    <th>订单用户id</th>
+                    <th>用户id</th>
+                    <th>用户名</th>
+                    <th>电话号码</th>
+                    <th>用户地址</th>
+                    <th>用户邮箱</th>
+                    <th>注册时间</th>
+                    <th>最近登录时间</th>
                 </tr>
                 </thead>
                 <tbody>
-                <?php foreach ($orders as $order) { ?>
+                <?php foreach ($users as $user) { ?>
                     <tr>
-                        <td>
-                            <a href="order_item.php?order_id=<?php echo $order->getOrderId() ?>"><?php echo $order->getOrderId() ?></a>
-                        </td>
-                        <td><?php echo $order->getOrderCode() ?></td>
-                        <td><?php echo $order->getOrderTime() ?></td>
-                        <td><?php echo $order->getOrderState() ?></td>
-                        <td><?php echo $order->getUserId() ?></td>
+                        <td><?php echo $user->getUserId() ?></td>
+                        <td><?php echo $user->getUsername() ?></td>
+                        <td><?php echo $user->getTelephone() ?></td>
+                        <td><?php echo $user->getAddress() ?></td>
+                        <td><?php echo $user->getEmail() ?></td>
+                        <td><?php echo $user->getRegisterTime() ?></td>
+                        <td><?php echo $user->getLatestLoginTime() ?></td>
                     </tr>
                 <?php } ?>
                 </tbody>
@@ -190,40 +166,40 @@ if ($sessionTool->isExist("admin"))
                 共<span class="pagination pagination-sm"><?php echo $pager->getTotalPage() ?></span>页
                 <?php if ($pager->getCurPage() == 1) { ?>
                     <li>
-                        <a href="../../controllers/orderController.php?type=<?php echo $from ?>&dst=admin/order.php&cur_page=<?php if ($pager->getNextPage()) echo $cur_page + 1; else echo $pager->getTotalPage();
+                        <a href="../../controllers/userController.php?type=<?php echo $from ?>&dst=admin/user.php&cur_page=<?php if ($pager->getNextPage()) echo $cur_page + 1; else echo $pager->getTotalPage();
                         ?>">下一页</a>
                     </li>
                     <li>
-                        <a href="../../controllers/orderController.php?type=<?php echo $from ?>&dst=admin/order.php&cur_page=<?php echo $pager->getTotalPage();
+                        <a href="../../controllers/userController.php?type=<?php echo $from ?>&dst=admin/user.php&cur_page=<?php echo $pager->getTotalPage();
                         ?>">尾
                             页</a>
                     </li>
                 <?php } else if ($pager->getCurPage() == $pager->getTotalPage()) { ?>
                     <li>
-                        <a href="../../controllers/orderController.php?type=<?php echo $from ?>&dst=admin/order.php&cur_page=<?php echo 1;
+                        <a href="../../controllers/userController.php?type=<?php echo $from ?>&dst=admin/user.php&cur_page=<?php echo 1;
                         ?>">首
                             页</a>
                     </li>
                     <li>
-                        <a href="../../controllers/orderController.php?type=<?php echo $from ?>&dst=admin/order.php&cur_page=<?php if ($pager->getPrevPage()) echo $cur_page - 1; else echo 1;
+                        <a href="../../controllers/userController.php?type=<?php echo $from ?>&dst=admin/user.php&cur_page=<?php if ($pager->getPrevPage()) echo $cur_page - 1; else echo 1;
                         ?>">上一页</a>
                     </li>
                 <?php } else { ?>
                     <li>
-                        <a href="../../controllers/orderController.php?type=<?php echo $from ?>&dst=admin/order.php&cur_page=<?php echo 1;
+                        <a href="../../controllers/userController.php?type=<?php echo $from ?>&dst=admin/user.php&cur_page=<?php echo 1;
                         ?>">首
                             页</a>
                     </li>
                     <li>
-                        <a href="../../controllers/orderController.php?type=<?php echo $from ?>&dst=admin/order.php&cur_page=<?php if ($pager->getPrevPage()) echo $cur_page - 1; else echo 1;
+                        <a href="../../controllers/userController.php?type=<?php echo $from ?>&dst=admin/user.php&cur_page=<?php if ($pager->getPrevPage()) echo $cur_page - 1; else echo 1;
                         ?>">上一页</a>
                     </li>
                     <li>
-                        <a href="../../controllers/orderController.php?type=<?php echo $from ?>&dst=admin/order.php&cur_page=<?php if ($pager->getNextPage()) echo $cur_page + 1; else echo $pager->getTotalPage();
+                        <a href="../../controllers/userController.php?type=<?php echo $from ?>&dst=admin/user.php&cur_page=<?php if ($pager->getNextPage()) echo $cur_page + 1; else echo $pager->getTotalPage();
                         ?>">下一页</a>
                     </li>
                     <li>
-                        <a href="../../controllers/orderController.php?type=<?php echo $from ?>&dst=admin/order.php&cur_page=<?php echo $pager->getTotalPage();
+                        <a href="../../controllers/userController.php?type=<?php echo $from ?>&dst=admin/user.php&cur_page=<?php echo $pager->getTotalPage();
                         ?>">尾
                             页</a>
                     </li>
@@ -258,7 +234,7 @@ if ($sessionTool->isExist("admin"))
                             $('#order_tbody').append(
                                 '<tr>' +
                                 '<td>' +
-                                '    <a href="order_item.php?order_id=' + this.order_id + '">' + this.order_id + '</a>' +
+                                '    <a href="../../controllers/orderController.php?type=find_order_and_item&dst=admin/order_item.php&order_id=' + this.order_id + '">' + this.order_id + '</a>' +
                                 '</td>' +
                                 '<td>' + this.order_code + '</td>' +
                                 '<td>' + this.order_time + '</td>' +
@@ -271,6 +247,8 @@ if ($sessionTool->isExist("admin"))
                     }
                 }
             });
+
+
         })
     </script>
     <!-- Page Specific Plugins -->

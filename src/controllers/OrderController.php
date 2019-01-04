@@ -38,6 +38,10 @@ class OrderController
         return $this->orderDao->addOrder($order_attr);
     }
 
+    public function findOrderItems($where) {
+
+    }
+
     /**
      * @param $order_item_attr
      * @return int
@@ -61,5 +65,14 @@ class OrderController
     public function getCounts()
     {
         return $this->orderDao->getCounts();
+    }
+
+    /**
+     * @param int $order_id
+     * @param int $order_state
+     * @return bool
+     */
+    public function modify_order_state($order_id, $order_state) {
+        return $this->orderDao->modify_order_state($order_id, $order_state);
     }
 }

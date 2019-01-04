@@ -102,9 +102,22 @@ class GoodsDao
     /**
      * @return int
      */
-    public function getCounts()
+    public function getCounts($where)
     {
         $sql = "select count(*) as counts from `goods`";
+        if (count($where) > 0) {
+            $key = array_keys($where)[0];
+            switch ($key) {
+                case 'goods_id' || 'goods_class_id':
+                    $sql = $sql . " where " . $key . "=" . $where[$key];
+                    break;
+                case 'goods_name':
+                    $sql = $sql . " where " . $key . "='" . $where[$key] . "'";
+                    break;
+                default:
+                    break;
+            }
+        }
         $this->db->query($sql);
         $rs = $this->db->getRs();
         $row = $rs->fetch_array();

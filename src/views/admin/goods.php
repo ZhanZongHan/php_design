@@ -10,8 +10,9 @@ include_once($_COOKIE['ABSPATH'] . '/src/tools/GoodsPager.php');
 include_once($_COOKIE['ABSPATH'] . '/src/controllers/GoodsController.php');
 include_once($_COOKIE['ABSPATH'] . '/src/controllers/getDatas.php');
 $sessionTool = new SessionTool();
+if (!$sessionTool->admin_session_validate())
+    header("Location:../admin/admin_index.php");
 isset($_GET['cur_page']) ? $cur_page = $_GET['cur_page'] : $cur_page = 1;
-$pager = new GoodsPager($cur_page);
 if ($sessionTool->isExist('goodses')) {
     $goodses = $sessionTool->getAttribute('goodses');
 } else {
@@ -23,7 +24,17 @@ if ($sessionTool->isExist('goods_classes')) {
     $goods_classes = get_goods_classes();
 }
 $from = '';
-(isset($_GET['from']) && $_GET['from'] = 'by_goods_class_id') ? $from = 'show_goodses_by_goods_class_id' : $from = 'show_all_goodses';
+$where = array();
+if (isset($_GET['from']) && $_GET['from'] = 'by_goods_class_id') {
+    $from = 'show_goodses_by_goods_class_id';
+    $where['goods_class_id'] = $_GET['goods_class_id'];
+} else {
+    $from = 'show_all_goodses';
+}
+$pager = new GoodsPager($cur_page, $where);
+$admin = "";
+if ($sessionTool->isExist("admin"))
+    $admin = $sessionTool->getAttribute("admin");
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -44,7 +55,8 @@ $from = '';
     <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
     <!-- Page Specific CSS -->
     <link rel="stylesheet" href="http://cdn.oesmith.co.uk/morris-0.4.3.min.css">
-
+    <script src="http://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="http://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
 
@@ -71,24 +83,31 @@ $from = '';
                     <a href="../../controllers/orderController.php?type=show_all_orders&dst=admin/order.php&cur_page=<?php echo $cur_page ?>"><i
                                 class="fa fa-desktop"></i> 订单管理</a>
                 </li>
-                <li><a href="#"><i class="fa fa-file"></i> 用户管理</a></li>
-                <li><a href="#"><i class="fa fa-table"></i> 报表统计</a></li>
+                <li><a href="../../controllers/userController.php?type=show_all_users&dst=admin/user.php"><i
+                                class="fa fa-file"></i> 用户管理</a></li>
                 <li class="active"><a href="goods.php"><i class="fa fa-caret-square-o-down"></i>
                         商品管理</a></li>
             </ul>
 
             <ul class="nav navbar-nav navbar-right navbar-user">
-                <li class="dropdown user-dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> John Smith <b
-                                class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="#"><i class="fa fa-user"></i> Profile</a></li>
-                        <li><a href="#"><i class="fa fa-envelope"></i> Inbox <span class="badge">7</span></a></li>
-                        <li><a href="#"><i class="fa fa-gear"></i> Settings</a></li>
-                        <li class="divider"></li>
-                        <li><a href="../login/admin_login.php"><i class="fa fa-power-off"></i> 退出登录</a></li>
-                    </ul>
-                </li>
+                <?php if (!$admin) { ?>
+                    <li class="dropdown user-dropdown">
+                        <a href="../login/admin_login.php" class="dropdown-toggle">
+                            <i class="fa fa-power-off"></i> 登录
+                        </a></li>
+                <?php } else { ?>
+                    <li class="dropdown user-dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">欢迎您 ： <i
+                                    class="fa fa-user"></i> <?php echo $admin->getAdminName() ?>
+                            <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li class="divider"></li>
+                            <li><a href="../../controllers/adminController.php?type=logout&dst=login/admin_login.php"><i
+                                            class="fa fa-power-off"></i> 退出账户</a>
+                            </li>
+                        </ul>
+                    </li>
+                <?php } ?>
             </ul>
         </div><!-- /.navbar-collapse -->
     </nav>
@@ -176,49 +195,46 @@ $from = '';
             共<span class="pagination pagination-sm"><?php echo $pager->getTotalPage() ?></span>页
             <?php if ($pager->getCurPage() == 1) { ?>
                 <li>
-                    <a href="../../controllers/goodsController.php?type=<?php echo $from ?>&dst=admin/goods.php&cur_page=<?php echo $pager->getNextPage();
-                    if (isset($_GET['goods_class_id'])) echo "&goods_class_id=" . $_GET['goods_class_id'] ?>">下一页&rarr;</a>
+                    <a href="../../controllers/goodsController.php?type=<?php echo $from ?>&dst=admin/goods.php&cur_page=<?php if ($pager->getNextPage()) echo $cur_page + 1; else echo $pager->getTotalPage();
+                    if (isset($_GET['goods_class_id'])) echo "&goods_class_id=" . $_GET['goods_class_id'] ?>">下一页</a>
                 </li>
                 <li>
-                    <a href="../../controllers/goodsController.php?type=<?php echo $from ?>&dst=admin/goods.php&cur_page=<?php echo $pager->getTailPage();
+                    <a href="../../controllers/goodsController.php?type=<?php echo $from ?>&dst=admin/goods.php&cur_page=<?php echo $pager->getTotalPage();
                     if (isset($_GET['goods_class_id'])) echo "&goods_class_id=" . $_GET['goods_class_id'] ?>">尾
                         页</a>
                 </li>
             <?php } else if ($pager->getCurPage() == $pager->getTotalPage()) { ?>
                 <li>
-                    <a href="../../controllers/goodsController.php?type=<?php echo $from ?>&dst=admin/goods.php&cur_page=<?php echo $pager->getHomePage();
+                    <a href="../../controllers/goodsController.php?type=<?php echo $from ?>&dst=admin/goods.php&cur_page=<?php echo 1;
                     if (isset($_GET['goods_class_id'])) echo "&goods_class_id=" . $_GET['goods_class_id'] ?>">首
                         页</a>
                 </li>
                 <li>
-                    <a href="../../controllers/goodsController.php?type=<?php echo $from ?>&dst=admin/goods.php&cur_page=<?php echo $pager->getPrevPage();
-                    if (isset($_GET['goods_class_id'])) echo "&goods_class_id=" . $_GET['goods_class_id'] ?>">&larr;上一页</a>
+                    <a href="../../controllers/goodsController.php?type=<?php echo $from ?>&dst=admin/goods.php&cur_page=<?php if ($pager->getPrevPage()) echo $cur_page - 1; else echo 1;
+                    if (isset($_GET['goods_class_id'])) echo "&goods_class_id=" . $_GET['goods_class_id'] ?>">上一页</a>
                 </li>
             <?php } else { ?>
                 <li>
-                    <a href="../../controllers/goodsController.php?type=<?php echo $from ?>&dst=admin/goods.php&cur_page=<?php echo $pager->getHomePage();
+                    <a href="../../controllers/goodsController.php?type=<?php echo $from ?>&dst=admin/goods.php&cur_page=<?php echo 1;
                     if (isset($_GET['goods_class_id'])) echo "&goods_class_id=" . $_GET['goods_class_id'] ?>">首
                         页</a>
                 </li>
                 <li>
-                    <a href="../../controllers/goodsController.php?type=<?php echo $from ?>&dst=admin/goods.php&cur_page=<?php echo $pager->getPrevPage();
-                    if (isset($_GET['goods_class_id'])) echo "&goods_class_id=" . $_GET['goods_class_id'] ?>">&larr;上一页</a>
+                    <a href="../../controllers/goodsController.php?type=<?php echo $from ?>&dst=admin/goods.php&cur_page=<?php if ($pager->getPrevPage()) echo $cur_page - 1; else echo 1;
+                    if (isset($_GET['goods_class_id'])) echo "&goods_class_id=" . $_GET['goods_class_id'] ?>">上一页</a>
                 </li>
                 <li>
-                    <a href="../../controllers/goodsController.php?type=<?php echo $from ?>&dst=admin/goods.php&cur_page=<?php echo $pager->getNextPage();
-                    if (isset($_GET['goods_class_id'])) echo "&goods_class_id=" . $_GET['goods_class_id'] ?>">下一页&rarr;</a>
+                    <a href="../../controllers/goodsController.php?type=<?php echo $from ?>&dst=admin/goods.php&cur_page=<?php if ($pager->getNextPage()) echo $cur_page + 1; else echo $pager->getTotalPage();
+                    if (isset($_GET['goods_class_id'])) echo "&goods_class_id=" . $_GET['goods_class_id'] ?>">下一页</a>
                 </li>
                 <li>
-                    <a href="../../controllers/goodsController.php?type=<?php echo $from ?>&dst=admin/goods.php&cur_page=<?php echo $pager->getTailPage();
+                    <a href="../../controllers/goodsController.php?type=<?php echo $from ?>&dst=admin/goods.php&cur_page=<?php echo $pager->getTotalPage();
                     if (isset($_GET['goods_class_id'])) echo "&goods_class_id=" . $_GET['goods_class_id'] ?>">尾
                         页</a>
                 </li>
             <?php } ?>
         </ul>
     </div>
-    <!-- JavaScript -->
-    <script src="http://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
-    <script src="http://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
     <!-- Page Specific Plugins -->
     <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>

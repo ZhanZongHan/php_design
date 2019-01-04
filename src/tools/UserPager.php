@@ -2,16 +2,15 @@
 /**
  * Created by PhpStorm.
  * User: zzh
- * Date: 18-12-31
- * Time: 上午1:08
+ * Date: 19-1-4
+ * Time: 下午8:39
  */
-include_once($_COOKIE['ABSPATH'] . '/src/controllers/GoodsController.php');
+include_once($_COOKIE['ABSPATH'] . '/src/controllers/UserController.php');
 include_once($_COOKIE['ABSPATH'] . '/src/tools/Pager.php');
-
-class GoodsPager extends Pager
+class UserPager extends Pager
 {
     private static $counts;    //总数据数
-    public static $page_size = 2;     //每页显示的数据数量
+    public static $page_size = 4;     //每页显示的数据数量
 
     public function __construct($cur_page,$where=array())
     {
@@ -22,6 +21,6 @@ class GoodsPager extends Pager
 
     public function getCounts($where)
     {
-        return (new GoodsController())->getCounts($where);
+        return (new UserController())->getCounts();
     }
 }

@@ -126,8 +126,8 @@ class GoodsController
     /**
      * @return int
      */
-    public function getCounts()
+    public function getCounts($where)
     {
-        return $this->goodsDao->getCounts();
+        return $this->goodsDao->getCounts($where);
     }
 }
