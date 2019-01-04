@@ -471,7 +471,7 @@ if (isset($_COOKIE['username']) and isset($_COOKIE['password'])) {
                             alert("用户名或密码输入错误！");
                         }
                     }
-                }
+                };
                 xmlhttp.open("POST", "../../controllers/userController.php", true);
                 xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
                 xmlhttp.send("username="+username+"&password="+password+"&login_submit=1&remember_password=" + remember_password.is(":checked"));

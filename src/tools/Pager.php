@@ -16,21 +16,19 @@ abstract class Pager
     public function getNextPage()
     {
         if ($this->cur_page + 1 > $this->total_page) {
-            $this->cur_page = $this->total_page;
+            return false;
         } else {
-            $this->cur_page += 1;
+            return true;
         }
-        return $this->cur_page;
     }
 
     public function getPrevPage()
     {
         if ($this->cur_page - 1 < 1) {
-            $this->cur_page = 1;
+            return false;
         } else {
-            $this->cur_page -= 1;
+            return true;
         }
-        return $this->cur_page;
     }
 
     public function getHomePage()

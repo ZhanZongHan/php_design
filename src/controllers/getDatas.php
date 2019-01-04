@@ -66,8 +66,10 @@ function get_goods_imgs_by_goods_id($goods_id)
     return $goodsController->findGoodsImgs($where);
 }
 
-function get_orders()
+function get_orders($cur_page)
 {
+    global $orderController;
+    return $orderController->findOrders(array(), $cur_page);
 }
 
 function get_order_items()

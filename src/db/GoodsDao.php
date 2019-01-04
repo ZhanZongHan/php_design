@@ -99,6 +99,9 @@ class GoodsDao
         return $goods_attr['goods_id'];
     }
 
+    /**
+     * @return int
+     */
     public function getCounts()
     {
         $sql = "select count(*) as counts from `goods`";

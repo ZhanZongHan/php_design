@@ -13,7 +13,6 @@ class Order
     private $total_price;
     private $user_addr;
     private $user_phone;
-    private $postcode;
     private $order_state;
     private $user_id;
     private $order_time;
@@ -96,22 +95,6 @@ class Order
     public function setUserPhone($user_phone)
     {
         $this->user_phone = $user_phone;
-    }
-
-    /**
-     * @return string
-     */
-    public function getPostcode()
-    {
-        return $this->postcode;
-    }
-
-    /**
-     * @param string $postcode
-     */
-    public function setPostcode($postcode)
-    {
-        $this->postcode = $postcode;
     }
 
     /**

@@ -1,4 +1,10 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: zzh
+ * Date: 19-1-1
+ * Time: 下午5:20
+ */
 include_once($_COOKIE['ABSPATH'] . '/src/views/user/head_model.php');
 $sessionTool = new SessionTool();
 $head_icons = scandir($_COOKIE['ABSPATH'] . '/uploads/user_head_icon');
@@ -9,6 +15,11 @@ if (!$sessionTool->isExist('USER_LOGIN_SUCCESS'))
 $user = "";
 if ($sessionTool->isExist("user"))
     $user = $sessionTool->getAttribute("user");
+if ($sesssionTool->isExist('goods_classes')) {
+    $goods_classes = $sesssionTool->getAttribute('goods_classes');
+} else {
+    $goods_classes = get_goods_classes();
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -32,7 +43,10 @@ if ($sessionTool->isExist("user"))
     <link href="css/font-awesome.css" rel="stylesheet" type="text/css" media="all"/>
     <!-- //font-awesome icons -->
     <!-- js -->
-    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+    <script src="http://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="http://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
     <!-- start-smoth-scrolling -->
     <script type="text/javascript" src="js/move-top.js"></script>
     <script type="text/javascript" src="js/easing.js"></script>
@@ -46,7 +60,6 @@ if ($sessionTool->isExist("user"))
     </script>
     <!-- start-smoth-scrolling -->
 </head>
-
 <body>
 <!-- header -->
 <div class="agileits_header">
@@ -159,116 +172,20 @@ if ($sessionTool->isExist("user"))
     </div>
 </div>
 <!-- //products-breadcrumb -->
-<!-- top-brands -->
-<div class="top-brands">
-    <div class="container">
-        <h3>Hot Offers</h3>
-        <div class="agile_top_brands_grids">
-            <?php foreach ($goodses as $goods) { ?>
-                <div class="col-md-3 top_brand_left">
-                    <div class="hover14 column">
-                        <div class="agile_top_brand_left_grid">
-                            <div class="agile_top_brand_left_grid1">
-                                <figure>
-                                    <div class="snipcart-item block">
-                                        <div class="snipcart-thumb">
-                                            <a href="goods_item.php?goods_id=<?php echo $goods->getGoodsId() ?>"><img
-                                                        height="155px" width="220px"
-                                                        src="<?php echo $goods->getGoodsPrimaryImgUrl() ?>"/></a>
-                                            <p align="center"><?php echo $goods->getGoodsName() ?></p>
-                                            <p align="center">库存量：<?php echo $goods->getGoodsStock() ?></p>
-                                            <p align="center"> <b>￥<?php echo $goods->getGoodsPrice() ?></b></p>
-                                        </div>
-                                        <div class="snipcart-details top_brand_home_details">
-                                            <button class="btn btn-danger my-cart-btn hvr-sweep-to-right"
-                                                    data-id="<?php echo $goods->getGoodsId() ?>"
-                                                    data-name="<?php echo $goods->getGoodsName() ?>"
-                                                    data-summary="<?php echo $goods->getGoodsDescription() ?>"
-                                                    data-price="<?php echo $goods->getGoodsPrice() ?>" data-quantity="1"
-                                                    data-image="<?php echo $goods->getGoodsPrimaryImgUrl() ?>">Add
-                                                to
-                                                Cart
-                                            </button>
-                                        </div>
-                                    </div>
-                                </figure>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            <?php } ?>
-            <!-- 结算框 -->
-            <div class="modal fade" id="settlement">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <!-- 模态框头部 -->
-                        <div class="modal-header">
-                            <h4 class="modal-title">操作提示</h4>
-                        </div>
-                        <!-- 模态框主体 -->
-                        <div class="modal-body">
-                            <h5>是否确认结算</h5>
-                        </div>
-                        <!-- 模态框底部 -->
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-primary" id="settlement_button" data-toggle="modal"
-                                    data-target="#settlement">结&nbsp;算
-                            </button>
-                            <button type="button" class="btn btn-default" data-dismiss="modal">关&nbsp;闭</button>
-                        </div>
-                    </div>
+<!-- banner -->
+<div class="banner">
+    <div class="w3l_banner_nav_right">
+        <div class="agileinfo_single">
 
-                </div>
+            <div class="col-md-8 agileinfo_single_right">
+                <table class="table table-hover table-responsive"></table>
             </div>
+            <div class="clearfix"> </div>
         </div>
     </div>
     <div class="clearfix"></div>
 </div>
-<ul class="pager">
-    共<span class="pagination pagination-sm"><?php echo $pager->getTotalPage() ?></span>页
-    <?php if ($pager->getCurPage() == 1) { ?>
-        <li>
-            <a href="../../controllers/goodsController.php?type=<?php echo $from ?>&dst=user/user_index.php&cur_page=<?php echo $pager->getNextPage();
-            if (isset($_GET['goods_class_id'])) echo "&goods_class_id=" . $_GET['goods_class_id'] ?>">下一页</a>
-        </li>
-        <li>
-            <a href="../../controllers/goodsController.php?type=<?php echo $from ?>&dst=user/user_index.php&cur_page=<?php echo $pager->getTailPage();
-            if (isset($_GET['goods_class_id'])) echo "&goods_class_id=" . $_GET['goods_class_id'] ?>">尾
-                页</a>
-        </li>
-    <?php } else if ($pager->getCurPage() == $pager->getTotalPage()) { ?>
-        <li>
-            <a href="../../controllers/goodsController.php?type=<?php echo $from ?>&dst=user/user_index.php&cur_page=<?php echo $pager->getHomePage();
-            if (isset($_GET['goods_class_id'])) echo "&goods_class_id=" . $_GET['goods_class_id'] ?>">首
-                页</a>
-        </li>
-        <li>
-            <a href="../../controllers/goodsController.php?type=<?php echo $from ?>&dst=user/user_index.php&cur_page=<?php echo $pager->getPrevPage();
-            if (isset($_GET['goods_class_id'])) echo "&goods_class_id=" . $_GET['goods_class_id'] ?>">上一页</a>
-        </li>
-    <?php } else { ?>
-        <li>
-            <a href="../../controllers/goodsController.php?type=<?php echo $from ?>&dst=user/user_index.php&cur_page=<?php echo $pager->getHomePage();
-            if (isset($_GET['goods_class_id'])) echo "&goods_class_id=" . $_GET['goods_class_id'] ?>">首
-                页</a>
-        </li>
-        <li>
-            <a href="../../controllers/goodsController.php?type=<?php echo $from ?>&dst=user/user_index.php&cur_page=<?php echo $pager->getPrevPage();
-            if (isset($_GET['goods_class_id'])) echo "&goods_class_id=" . $_GET['goods_class_id'] ?>">上一页</a>
-        </li>
-        <li>
-            <a href="../../controllers/goodsController.php?type=<?php echo $from ?>&dst=user/user_index.php&cur_page=<?php echo $pager->getNextPage();
-            if (isset($_GET['goods_class_id'])) echo "&goods_class_id=" . $_GET['goods_class_id'] ?>">下一页</a>
-        </li>
-        <li>
-            <a href="../../controllers/goodsController.php?type=<?php echo $from ?>&dst=user/user_index.php&cur_page=<?php echo $pager->getTailPage();
-            if (isset($_GET['goods_class_id'])) echo "&goods_class_id=" . $_GET['goods_class_id'] ?>">尾
-                页</a>
-        </li>
-    <?php } ?>
-</ul>
-</div>
-</div>
+<!-- //banner -->
 <!-- newsletter -->
 <div class="newsletter">
     <div class="container">
@@ -277,12 +194,11 @@ if ($sessionTool->isExist("user"))
         </div>
         <div class="w3agile_newsletter_right">
             <form action="#" method="post">
-                <input type="email" name="Email" value="Email" onfocus="this.value = '';"
-                       onblur="if (this.value == '') {this.value = 'Email';}" required="">
+                <input type="email" name="Email" value="Email" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Email';}" required="">
                 <input type="submit" value="subscribe now">
             </form>
         </div>
-        <div class="clearfix"></div>
+        <div class="clearfix"> </div>
     </div>
 </div>
 <!-- //newsletter -->
@@ -320,22 +236,20 @@ if ($sessionTool->isExist("user"))
         <div class="col-md-3 w3_footer_grid">
             <h3>twitter posts</h3>
             <ul class="w3_footer_grid_list1">
-                <li><label class="fa fa-twitter" aria-hidden="true"></label><i>01 day ago</i><span>Non numquam <a
-                                href="#">http://sd.ds/13jklf#</a>
+                <li><label class="fa fa-twitter" aria-hidden="true"></label><i>01 day ago</i><span>Non numquam <a href="#">http://sd.ds/13jklf#</a>
 						eius modi tempora incidunt ut labore et
 						<a href="#">http://sd.ds/1389kjklf#</a>quo nulla.</span></li>
-                <li><label class="fa fa-twitter" aria-hidden="true"></label><i>02 day ago</i><span>Con numquam <a
-                                href="#">http://fd.uf/56hfg#</a>
+                <li><label class="fa fa-twitter" aria-hidden="true"></label><i>02 day ago</i><span>Con numquam <a href="#">http://fd.uf/56hfg#</a>
 						eius modi tempora incidunt ut labore et
 						<a href="#">http://fd.uf/56hfg#</a>quo nulla.</span></li>
             </ul>
         </div>
-        <div class="clearfix"></div>
+        <div class="clearfix"> </div>
         <div class="agile_footer_grids">
             <div class="col-md-3 w3_footer_grid agile_footer_grids_w3_footer">
                 <div class="w3_footer_grid_bottom">
                     <h4>100% secure payments</h4>
-                    <img src="images/card.png" alt=" " class="img-responsive"/>
+                    <img src="images/card.png" alt=" " class="img-responsive" />
                 </div>
             </div>
             <div class="col-md-3 w3_footer_grid agile_footer_grids_w3_footer">
@@ -350,12 +264,10 @@ if ($sessionTool->isExist("user"))
                     </ul>
                 </div>
             </div>
-            <div class="clearfix"></div>
+            <div class="clearfix"> </div>
         </div>
         <div class="wthree_footer_copy">
-            <p>Copyright &copy; 2016.Company name All rights reserved.More Templates <a href="http://www.cssmoban.com/"
-                                                                                        target="_blank" title="模板之家">模板之家</a>
-                - Collect from <a href="http://www.cssmoban.com/" title="网页模板" target="_blank">网页模板</a></p>
+            <p>Copyright &copy; 2016.Company name All rights reserved.More Templates <a href="http://www.cssmoban.com/" target="_blank" title="模板之家">模板之家</a> - Collect from <a href="http://www.cssmoban.com/" title="网页模板" target="_blank">网页模板</a></p>
         </div>
     </div>
 </div>
@@ -363,23 +275,23 @@ if ($sessionTool->isExist("user"))
 <!-- Bootstrap Core JavaScript -->
 <script src="js/bootstrap.min.js"></script>
 <script>
-    $(document).ready(function () {
+    $(document).ready(function(){
         $(".dropdown").hover(
-            function () {
-                $('.dropdown-menu', this).stop(true, true).slideDown("fast");
+            function() {
+                $('.dropdown-menu', this).stop( true, true ).slideDown("fast");
                 $(this).toggleClass('open');
             },
-            function () {
-                $('.dropdown-menu', this).stop(true, true).slideUp("fast");
+            function() {
+                $('.dropdown-menu', this).stop( true, true ).slideUp("fast");
                 $(this).toggleClass('open');
             }
         );
     });
-
 </script>
+<script type="text/javascript" id="snipcart" src="js/snipcart.js" data-api-key="ZGQxNzVjZTItOWRmNS00YjJhLTlmNGUtMDE4NjdiY2RmZGNj"></script>
 <!-- here stars scrolling icon -->
 <script type="text/javascript">
-    $(document).ready(function () {
+    $(document).ready(function() {
         /*
             var defaults = {
             containerID: 'toTop', // fading element id
@@ -389,25 +301,25 @@ if ($sessionTool->isExist("user"))
             };
         */
 
-        $().UItoTop({easingType: 'easeOutQuart'});
+        $().UItoTop({ easingType: 'easeOutQuart' });
     });
 </script>
 <!-- //here ends scrolling icon -->
 <script type='text/javascript' src="js/jquery.mycart.js"></script>
 <script type="text/javascript">
     $(function () {
-        var goToCartIcon = function ($addTocartBtn) {
+
+        var goToCartIcon = function($addTocartBtn){
             var $cartIcon = $(".my-cart-icon");
-            var $image = $('<img width="30px" height="30px" src="' + $addTocartBtn.data("image") + '"/>').css({
-                "position": "fixed",
-                "z-index": "999"
-            });
+            var $image = $('<img width="30px" height="30px" src="' + $addTocartBtn.data("image") + '"/>').css({"position": "fixed", "z-index": "999"});
             $addTocartBtn.prepend($image);
             var position = $cartIcon.position();
-            $image.animate({}, 500, "linear", function () {
+            $image.animate({
+
+            }, 500 , "linear", function() {
                 $image.remove();
             });
-        };
+        }
         <?php if (!$sessionTool->isExist('user')) {?>
         $('.my-cart-btn').click(function () {
             alert("请先登录在添加购物车！");
@@ -416,47 +328,35 @@ if ($sessionTool->isExist("user"))
             classCartIcon: 'my-cart-icon',
             classCartBadge: 'my-cart-badge',
             affixCartIcon: true,
-            checkoutCart: function (products) {
-                $.each(products, function () {
+            checkoutCart: function(products) {
+                $.each(products, function(){
                     console.log(this);
                 });
             },
-            clickOnAddToCart: function ($addTocart) {
+            clickOnAddToCart: function($addTocart){
                 goToCartIcon($addTocart);
-
             },
-            getDiscountPrice: function (products) {
+            getDiscountPrice: function(products) {
                 var total = 0;
-                $.each(products, function () {
+                $.each(products, function(){
                     total += this.quantity * this.price;
                 });
                 return total * 1;
             }
-        });<?php }?>
+        });<?php } ?>
 
-        $('#logout_a').logout({});
-
-        $('#settlement_button').click(function () {
-            var xmlhttp;
-            xmlhttp = new XMLHttpRequest();
-            xmlhttp.open("POST", "../../controllers/orderController.php", true);
-            xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-            var products = JSON.parse(sessionStorage.products);
-            var total = 0;
-            $.each(products, function () {
-                total += parseFloat(this.price);
-            });
-            xmlhttp.send(JSON.stringify(sessionStorage.products) + "&add_order_submit=1&user_id=<?php echo $user->getUserId()?>&user_addr=<?php echo $user->getAddress()?>&user_phone=<?php echo $user->getTelephone()?>&total_price=" + total);
-            xmlhttp.onreadystatechange = function () {
-                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                    alert("下单成功，可通过右上角处查看订单信息！");
-                    $().clearProduct2({});
-                    window.location.href = "user_index.php";
-                }
-            }
+        var products = JSON.parse(sessionStorage.products);
+        $.each(products, function() {
+            $('table').html(
+                '<tr title="' + this.summary + '" data-id="' + this.id + '" data-price="' + this.price + '">' +
+                '<td class="text-center" style="width: 30px;"><img width="30px" height="30px" src="' + this.image + '"/></td>' +
+                '<td>' + this.name + '</td>' +
+                '<td title="Unit Price">$' + this.price + '</td>' +
+                '<td title="Quantity"><input type="number" min="1" style="width: 70px;" class="my-product-quantity" value="' + this.quantity + '"/></td>' +
+                '</tr>'
+            );
         });
     });
-
 </script>
 </body>
 </html>
